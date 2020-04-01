@@ -1,4 +1,5 @@
-//
+// 
+//	Practica2T.cpp
 //
 // Created by Carlos Fdez
 //
