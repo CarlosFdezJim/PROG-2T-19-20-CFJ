@@ -1,6 +1,7 @@
 //
+//	CRISTOBOOK.cpp
 //
-// Created by Carlos Fdez
+//  Created by Carlos Fdez
 //
 //
 
@@ -18,6 +19,7 @@
 //************************//
 //********************************************************************************************************//
 #include <iostream>
+#include <stdlib.h>
 #include <string.h>
 using namespace std;
 
@@ -94,7 +96,7 @@ Foto* crearFoto(){
 
 	Foto *f = new Foto;
 
-	if (p == 0){
+	if (f == 0){
 		cerr << "Error. No hay memoria suficiente. Se abortará la ejecución" << endl;
 		exit(-1);
 	}
@@ -110,9 +112,9 @@ Foto* crearFoto(){
 void borrarFoto(Foto *f){
 
     //formateo a cero/nulo todos los datos que tiene una persona
-    p->ruta = "";
-    p->tipo = "";
-    p->tamanio = -1;
+    f->ruta = "";
+    f->tipo = "";
+    f->tamanio = -1;
 
     //borro el fragmento de memoria
     delete f;
@@ -201,12 +203,24 @@ string getTipo(Foto *f){
  * @author Carlos Fdez.
  */
 int long unsigned getTamanio (Foto *f){
-    return p->tamanio;
+    return f->tamanio;
 }
 
 //----------------------------------------------------------//
 
 //********************************************************************************************************//
+/**
+ * @brief Imprime por pantalla el nombre completo de la foto.
+ * @param const Fecha F(E/S)
+ * @pre Los módulos getDia, getMes y getAnio deben de tener ya algún valor introducido.
+ * @post Imprimiremos la fecha por pantalla.
+ * @version 1.0
+ * @author Carlos Fdez.
+ */
+void printNombreFoto(Foto &f){
+	cout << getNombre(f) << "/" << getTipo(f) << "/" << getAnio(f) << endl;
+
+}
 /**
  * @brief Este módulo sólo muestra por pantalla el menú de opciones que tenemos disponibles.
  * @post El usuario seleccionará la opción que el desee.
@@ -254,7 +268,7 @@ void MenuInicio(){
 	
 			switch (opcion){
 				case 1:
-					CrearTablaUsuarios();
+					//CrearTablaUsuarios();
 					break;
 				case 2:
 					break;
