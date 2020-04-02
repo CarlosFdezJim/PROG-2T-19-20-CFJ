@@ -77,7 +77,15 @@ int long unsigned getTamanio (Foto *f);
 /*****************************************************************
  **  Implementación de los Prototipos del Tipo de Dato Usuario  **
  ****************************************************************/
-
+void setLogin(Usuario *u, string login);
+void setNombre(Usuario *u, string nombre);
+void setApellido(Usuario *u, string apellido);
+void setPerfilUsuario(Usuario *u, string perfil_usuario);
+//-----------------------------//
+string getLogin(Foto *u);
+string getNombre(Usuario *u);
+string getApellido(Usuario *u);
+string getPerfilUsuario(Usuario *u);
 /*********************************************************************
  ** Implementación de los Prototipos del Tipo de Dato TablaUsuarios **
  ********************************************************************/
@@ -161,10 +169,10 @@ void setTamanio (Foto *f, unsigned long int tamanio){
 }
 //----------------------------------------------------------//
 /**
- * @brief Este módulo se encarga de almacenar en el puntero de tipo Foto una variable string llamada tipo.
- * @param Foto *f		//Puntero de tipo foto.
+ * @brief Este módulo se encarga de almacenar en el puntero de tipo Usuario una variable string llamada login.
+ * @param Usuario *u		//Puntero de tipo Usuario.
  * @param string tipo		//Formato de la foto.
- * @post Se almacenará en la variable estructurada Foto el formato de la foto.
+ * @post Se almacenará en la variable estructurada Foto el login del usuario.
  * @version 1.0
  * @author Carlos Fdez.
  */
@@ -172,6 +180,51 @@ void setLogin(Usuario *u, string login){
 	
 	u->login = login;
 }
+/**
+ * @brief Este módulo se encarga de almacenar en el puntero de tipo Usuario una variable string llamada nombre.
+ * @param Usuario *u		//Puntero de tipo Usuario.
+ * @param string nombre		//Formato de la foto.
+ * @post Se almacenará en la variable estructurada Foto el nombre del usuario.
+ * @version 1.0
+ * @author Carlos Fdez.
+ */
+void setNombre(Usuario *u, string nombre){
+    u->nombre = nombre;
+}
+/**
+ * @brief Este módulo se encarga de almacenar en el puntero de tipo Usuario una variable string llamada apellido.
+ * @param Usuario *u		//Puntero de tipo Usuario.
+ * @param string apellido		//Formato de la foto.
+ * @post Se almacenará en la variable estructurada Foto el apellido del usuario.
+ * @version 1.0
+ * @author Carlos Fdez.
+ */
+void setApellido(Usuario *u, string apellido){
+    u->apellido = apellido;   
+}
+/**
+/**
+ * @brief Este módulo se encarga de almacenar en el puntero de tipo Usuario una variable string llamada login.
+ * @param Usuario *u		//Puntero de tipo Usuario.
+ * @param string tipo		//Formato de la foto.
+ * @post Se almacenará en la variable estructurada Foto el login del usuario.
+ * @version 1.0
+ * @author Carlos Fdez.
+ */
+void setPerfilUsuario(Usuario *u, string perfil_usuario){ 
+    u->perfil_usuario = perfil_usuario;
+}
+
+
+
+
+
+
+
+
+
+
+
 
 					/*******************
 					****	GET	****
@@ -205,10 +258,51 @@ string getTipo(Foto *f){
 int long unsigned getTamanio (Foto *f){
     return f->tamanio;
 }
-
+/**
+ * @brief Devuelve el puntero Login de una variable estructurada de tipo Usuario.
+ * @param Foto *f		//Puntero de tipo foto.
+ * @version 1.0
+ * @author Carlos Fdez.
+ */
+string getLogin(Foto *u){
+    return u->login;
+}
+/**
+ * @brief Devuelve el puntero Nombre de una variable estructurada de tipo Usuario.
+ * @param Foto *f		//Puntero de tipo foto.
+ * @version 1.0
+ * @author Carlos Fdez.
+ */
+string getNombre(Usuario *u){
+    return u->nombre;
+}
+/**
+ * @brief Devuelve el puntero Apellido de una variable estructurada de tipo Usuario.
+ * @param Foto *f		//Puntero de tipo foto.
+ * @version 1.0
+ * @author Carlos Fdez.
+ */
+string getApellido(Usuario *u){
+    return u->apellido;
+}
+/**
+ * @brief Devuelve el puntero Perfil_Usuario de una variable estructurada de tipo Usuario.
+ * @param Foto *f		//Puntero de tipo foto.
+ * @version 1.0
+ * @author Carlos Fdez.
+ */
+string getPerfilUsuario(Usuario *u){
+    return u->perfil_usuario;
+}
 //----------------------------------------------------------//
 
 //********************************************************************************************************//
+
+
+
+
+
+
 /**
  * @brief Imprime por pantalla el nombre completo de la foto.
  * @param const Fecha F(E/S)
@@ -218,7 +312,7 @@ int long unsigned getTamanio (Foto *f){
  * @author Carlos Fdez.
  */
 void printNombreFoto(Foto &f){
-	cout << getNombre(f) << "/" << getTipo(f) << "/" << getAnio(f) << endl;
+	cout << getNombre(f) << "." << getTipo(f) << endl;
 
 }
 /**
@@ -307,7 +401,7 @@ int main(){
  
  
 	MenuInicio();
- 
+
  
  
  
