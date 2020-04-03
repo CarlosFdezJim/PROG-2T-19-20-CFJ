@@ -31,7 +31,7 @@ struct Foto{
 	string ruta;			//ruta del archivo en el SO.
 	string tipo;			//Tipo de la foto(jpg, png).
 	unsigned long int tamanio;	//Se va a guardar en bytes.
-}
+};
 
 /****************************************
 ** Definición del TIPO DE DATO Usuario **
@@ -45,7 +45,7 @@ struct Usuario{
 	Foto* v_fotos;		//Vector Dinámico de Burbujas.
 	int dim_fotos;		//Dimensión del vector.
 	int totalFotosUsuario;	//utiles del vector
-}
+};
 
 //set,get,crearUsuario,eliminarUsuario, insertarFotoenUsuario,eliminarFotoUsuario,etc
 
@@ -56,7 +56,7 @@ struct Usuario{
 struct TablaUsuarios{
 	Usuario** punteroapuntero;	//Vector Dinámico de Punteros a Burbuja.
 	int totaltuplas;		//La reserva siempre es exacta y al tamaño, la dimensión, siempre coincide con las útiles.
-}
+};
 
 //set, get, crearTabla,eliminarTabla,InsertaUsuarioenTabla,eliminarUsuarioenTabla,etc
 
@@ -102,10 +102,11 @@ string getPerfilUsuario(Usuario *u);
  */
 Foto* crearFoto(){
 
-	Foto *f = new Foto;
+	Foto *f=0;
+	f = new Foto;
 
 	if (f == 0){
-		cerr << "Error. No hay memoria suficiente. Se abortará la ejecución" << endl;
+		cerr << "Error. No hay memoria suficiente para crear una foto nueva. Se abortará la ejecución" << endl;
 		exit(-1);
 	}
 	return f;
@@ -177,7 +178,6 @@ void setTamanio (Foto *f, unsigned long int tamanio){
  * @author Carlos Fdez.
  */
 void setLogin(Usuario *u, string login){
-	
 	u->login = login;
 }
 /**
@@ -264,7 +264,7 @@ int long unsigned getTamanio (Foto *f){
  * @version 1.0
  * @author Carlos Fdez.
  */
-string getLogin(Foto *u){
+string getLogin(Usuario *u){
     return u->login;
 }
 /**
@@ -295,7 +295,138 @@ string getPerfilUsuario(Usuario *u){
     return u->perfil_usuario;
 }
 //----------------------------------------------------------//
+/**
+ * @brief 
+ * @param 
+ * @param 
+ * @pre 
+ * @post 
+ * @version
+ * @author Carlos Fdez.
+ */
+Usuario* crearUsuario(){
 
+	Usuario *u=0;
+	u = new Usuario;
+	u->v_fotos = new Foto[u->dim_fotos];
+
+	u->login = "";
+	u->nombre = "";
+	u->apellido = "";
+	u->perfil_usuario = "";
+	u->v_fotos=0;	
+	u->dim_fotos=0;
+	u->totalFotosUsuario=0;
+
+		if (u == 0){
+			cerr << "Error. No hay memoria suficiente para crear una foto nueva. Se abortará la ejecución" << endl;
+			exit(-1);
+		}
+
+		if (u->v_fotos == 0){
+			cerr << "Error. No hay memoria suficiente. Se abortará la ejecución" << endl;
+			exit(-1);
+		}
+
+	return u;
+
+}
+/**
+ * @brief Módulo que borrará el espacio de memoria reservado a Foto, borrando primero los datos de la persona que queremos borrar y después borramos los punteros.
+ * @param Foto *f		//Puntero de tipo foto.
+ * @post Se reservará un espacio de memoria.
+ * @version 1.0
+ * @author Carlos Fdez.
+ */
+void eliminarUsuario(Usuario *u){
+
+	//formateo a cero/nulo todos los datos que tiene una persona
+	u->login = "";
+	u->nombre = "";
+	u->apellido = "";
+	u->perfil_usuario = "";	
+	
+	for(int i=0; i < u->totalFotosUsuario; i++){
+		borrarFoto(&u->v_fotos[i]);
+	}
+	
+	u->dim_fotos=-1;
+	u->totalFotosUsuario=-1;
+
+	//borro el fragmento de memoria
+	delete [] u->v_fotos;
+	delete u;
+
+	//elimino la dirección que referenciaba al fragmento de memoria
+	u = 0;
+}
+void CrearTablaUsuarios(Usuario *u){
+
+	//Usuarios predefinidos.
+	Usuario Carlos;
+	Usuario Jaime;
+	Usuario Cristian;
+	Usuario Adrian;
+	Usuario Jesus;
+	Usuario Pablo;
+	Usuario Ana;
+	
+	/***************************************
+	**************	CARLOS	****************
+	****************************************/
+	setLogin(Carlos*, "CarlosCristoRey");
+	setNombre(Carlos*, "Carlos");
+	setApellido(Carlos*, "Fernández");
+	//setPerfilUsuario(Carlos, string perfil_usuario);
+	
+	/***************************************
+	**************	JAIME	****************
+	****************************************/	
+	setLogin(Jaime, "JaimeCristoRey");
+	setNombre(Jaime, "Jaime");
+	setApellido(Jaime, "Cabezas");
+	//setPerfilUsuario(Jaime, string perfil_usuario);
+	
+	/***************************************
+	********	CRISTIAN	********
+	****************************************/	
+	setLogin(Cristian, "CristianCristoRey");
+	setNombre(Cristian, "Cristian");
+	setApellido(Cristian, "Campos");
+	//setPerfilUsuario(Cristian, string perfil_usuario);
+	
+	/***************************************
+	**************	ADRIAN	****************
+	****************************************/	
+	setLogin(Adrian, "AdrianCristoRey");
+	setNombre(Adrian, "Adrián");
+	setApellido(Adrian, "Castillo");
+	//setPerfilUsuario(Adrian, string perfil_usuario);
+	
+	/***************************************
+	**************	JESUS	****************
+	****************************************/	
+	setLogin(Jesus, "JesusCristoRey");
+	setNombre(Jesus, "Jesús");
+	setApellido(Jesus, "Rey");
+	//setPerfilUsuario(Jesus, string perfil_usuario);
+	
+	/***************************************
+	**************	PABLO	****************
+	****************************************/	
+	setLogin(Pablo, "PabloCristoRey");
+	setNombre(Pablo, "Pablo");
+	setApellido(Pablo, "García");
+	//setPerfilUsuario(Pablo, string perfil_usuario);
+	
+	/***************************************
+	**************	  ANA	****************
+	****************************************/	
+	setLogin(Ana, "AnaCristoRey");
+	setNombre(Ana, "Ana");
+	setApellido(Ana, "Tallón");
+	//setPerfilUsuario(Ana, string perfil_usuario);
+}
 //********************************************************************************************************//
 
 
@@ -311,9 +442,8 @@ string getPerfilUsuario(Usuario *u){
  * @version 1.0
  * @author Carlos Fdez.
  */
-void printNombreFoto(Foto &f){
-	cout << getNombre(f) << "." << getTipo(f) << endl;
-
+void printNombreFoto(Foto *f){
+	cout << getRuta(f) << "." << getTipo(f) << "-" << getTamanio(f) << endl;
 }
 /**
  * @brief Este módulo sólo muestra por pantalla el menú de opciones que tenemos disponibles.
@@ -338,7 +468,7 @@ void MostrarMenu(){
 		cout << "\n[9]  Eliminar Fotografía de un Usuario. ";
 		cout << "\n[10] Imprimir las Fotografías de un Usuario. ";
 		cout << "\n[11] Salir. " << DEFAULT << endl;
-	
+
 }
 /**
  * @brief Este módulo sirve para acceder a la opción del menu mostrado previamente.
@@ -365,21 +495,16 @@ void MenuInicio(){
 					//CrearTablaUsuarios();
 					break;
 				case 2:
-					//EliminarTablaUsuarios();
 					break;
 				case 3:
-					//printTablaUsuarios();
 					break;
-				case 4:
-					//InsertarUsuariosTabla();		
+				case 4:		
 					break;
-				case 5:
-					//EliminarUsuarioTabla();
+				case 5:		
 					break;
-				case 6:
-					//BuscarUsuarioLogin();
+				case 6:		
 					break;
-				case 7:
+				case 7:		
 					break;
 				case 8:		
 					break;
@@ -400,7 +525,6 @@ void MenuInicio(){
 int main(){
  
 	//Declaración de variables.
- 
  
  
  
