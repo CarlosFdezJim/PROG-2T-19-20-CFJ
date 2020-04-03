@@ -365,16 +365,21 @@ void MenuInicio(){
 					//CrearTablaUsuarios();
 					break;
 				case 2:
+					//EliminarTablaUsuarios();
 					break;
 				case 3:
+					//printTablaUsuarios();
 					break;
-				case 4:		
+				case 4:
+					//InsertarUsuariosTabla();		
 					break;
-				case 5:		
+				case 5:
+					//EliminarUsuarioTabla();
 					break;
-				case 6:		
+				case 6:
+					//BuscarUsuarioLogin();
 					break;
-				case 7:		
+				case 7:
 					break;
 				case 8:		
 					break;
