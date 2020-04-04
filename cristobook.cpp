@@ -372,7 +372,7 @@ void CrearTablaUsuarios(Usuario *u){
 	Usuario Ana;
 	
 	/***************************************
-	**************	CARLOS	****************
+	**************	CARLOS	*************
 	****************************************/
 	setLogin(Carlos*, "CarlosCristoRey");
 	setNombre(Carlos*, "Carlos");
