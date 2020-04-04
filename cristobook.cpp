@@ -39,9 +39,9 @@ struct Foto{
 struct Usuario{
 
 	string login;		//Debe ser único.
-	string nombre;
-	string apellido;
-	string perfil_usuario;
+	string nombre;		//Nombre del usuario
+	string apellido;	//Apellido del usuario
+	string perfil_usuario;	// Nombre de videojuego
 	Foto* v_fotos;		//Vector Dinámico de Burbujas.
 	int dim_fotos;		//Dimensión del vector.
 	int totalFotosUsuario;	//utiles del vector
@@ -132,7 +132,7 @@ void borrarFoto(Foto *f){
     f = 0;
 }
 					/*******************
-					****	SET		****
+					****	SET	****
 					********** *********/
 /**
  * @brief Este módulo se encarga de almacenar en el puntero de tipo Foto en una variable string llamada ruta.
@@ -204,10 +204,10 @@ void setApellido(Usuario *u, string apellido){
 }
 /**
 /**
- * @brief Este módulo se encarga de almacenar en el puntero de tipo Usuario una variable string llamada login.
+ * @brief Este módulo se encarga de almacenar en el puntero de tipo Usuario una variable string llamada perfil_usuario que almacenará el nombre del juego al que el usuario quiere jugar.
  * @param Usuario *u		//Puntero de tipo Usuario.
- * @param string tipo		//Formato de la foto.
- * @post Se almacenará en la variable estructurada Foto el login del usuario.
+ * @param string perfil_usuario		//Nombre del juego al que juega el usuario.
+ * @post Se almacenará en la variable estructurada Foto el juego favorito del usuario.
  * @version 1.0
  * @author Carlos Fdez.
  */
@@ -226,8 +226,9 @@ void setPerfilUsuario(Usuario *u, string perfil_usuario){
 
 
 
+
 					/*******************
-					****	GET		****
+					****	GET	****
 					********************/
 /**
  * @brief Devuelve el puntero Ruta de una variable estructurada de tipo Persona.
@@ -360,24 +361,24 @@ void eliminarUsuario(Usuario *u){
 	//elimino la dirección que referenciaba al fragmento de memoria
 	u = 0;
 }
-void CrearTablaUsuarios(Usuario *u){
+void UsuariosPredefinidos(Usuario *u){
 
 	//Usuarios predefinidos.
-	Usuario Carlos;
-	Usuario Jaime;
-	Usuario Cristian;
-	Usuario Adrian;
-	Usuario Jesus;
-	Usuario Pablo;
-	Usuario Ana;
+	Usuario *Carlos;
+	Usuario *Jaime;
+	Usuario *Cristian;
+	Usuario *Adrian;
+	Usuario *Jesus;
+	Usuario *Pablo;
+	Usuario *Ana;
 	
 	/***************************************
-	**************	CARLOS	*************
+	**************	CARLOS	****************
 	****************************************/
-	setLogin(Carlos*, "CarlosCristoRey");
-	setNombre(Carlos*, "Carlos");
-	setApellido(Carlos*, "Fernández");
-	//setPerfilUsuario(Carlos, string perfil_usuario);
+	setLogin(Carlos, "CarlosCristoRey");
+	setNombre(Carlos, "Carlos");
+	setApellido(Carlos, "Fernández");
+	setPerfilUsuario(Carlos, "Fifa");
 	
 	/***************************************
 	**************	JAIME	****************
@@ -385,7 +386,7 @@ void CrearTablaUsuarios(Usuario *u){
 	setLogin(Jaime, "JaimeCristoRey");
 	setNombre(Jaime, "Jaime");
 	setApellido(Jaime, "Cabezas");
-	//setPerfilUsuario(Jaime, string perfil_usuario);
+	setPerfilUsuario(Jaime, "Minecraft");
 	
 	/***************************************
 	********	CRISTIAN	********
@@ -393,7 +394,7 @@ void CrearTablaUsuarios(Usuario *u){
 	setLogin(Cristian, "CristianCristoRey");
 	setNombre(Cristian, "Cristian");
 	setApellido(Cristian, "Campos");
-	//setPerfilUsuario(Cristian, string perfil_usuario);
+	setPerfilUsuario(Cristian, "Footbal Manager");
 	
 	/***************************************
 	**************	ADRIAN	****************
@@ -401,7 +402,7 @@ void CrearTablaUsuarios(Usuario *u){
 	setLogin(Adrian, "AdrianCristoRey");
 	setNombre(Adrian, "Adrián");
 	setApellido(Adrian, "Castillo");
-	//setPerfilUsuario(Adrian, string perfil_usuario);
+	setPerfilUsuario(Adrian, "Counter Strike");
 	
 	/***************************************
 	**************	JESUS	****************
@@ -409,7 +410,7 @@ void CrearTablaUsuarios(Usuario *u){
 	setLogin(Jesus, "JesusCristoRey");
 	setNombre(Jesus, "Jesús");
 	setApellido(Jesus, "Rey");
-	//setPerfilUsuario(Jesus, string perfil_usuario);
+	setPerfilUsuario(Jesus, "GTA V");
 	
 	/***************************************
 	**************	PABLO	****************
@@ -417,7 +418,7 @@ void CrearTablaUsuarios(Usuario *u){
 	setLogin(Pablo, "PabloCristoRey");
 	setNombre(Pablo, "Pablo");
 	setApellido(Pablo, "García");
-	//setPerfilUsuario(Pablo, string perfil_usuario);
+	setPerfilUsuario(Pablo, "Counter Strike");
 	
 	/***************************************
 	**************	  ANA	****************
@@ -425,7 +426,7 @@ void CrearTablaUsuarios(Usuario *u){
 	setLogin(Ana, "AnaCristoRey");
 	setNombre(Ana, "Ana");
 	setApellido(Ana, "Tallón");
-	//setPerfilUsuario(Ana, string perfil_usuario);
+	setPerfilUsuario(Ana, "Animal Crossing");
 }
 //********************************************************************************************************//
 
