@@ -132,7 +132,7 @@ void borrarFoto(Foto *f){
     f = 0;
 }
 					/*******************
-					****	SET	****
+					****	SET		****
 					********** *********/
 /**
  * @brief Este módulo se encarga de almacenar en el puntero de tipo Foto en una variable string llamada ruta.
@@ -227,7 +227,7 @@ void setPerfilUsuario(Usuario *u, string perfil_usuario){
 
 
 					/*******************
-					****	GET	****
+					****	GET		****
 					********************/
 /**
  * @brief Devuelve el puntero Ruta de una variable estructurada de tipo Persona.
