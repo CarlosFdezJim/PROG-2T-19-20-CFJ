@@ -65,6 +65,8 @@ struct TablaUsuarios{
  *************************************************************/
 Foto* crearFoto();
 void borrarFoto(Foto *f);
+Usuario* crearUsuario();
+void borrarUsuario(Usuario *u);
 //-----------------------------//
 void setRuta(Foto *f, string ruta);
 void setTipo(Foto *f, string tipo);
@@ -130,6 +132,46 @@ void borrarFoto(Foto *f){
 
     //elimino la dirección que referenciaba al fragmento de memoria
     f = 0;
+}
+/**
+ * @brief Se reservará un espacio de memoria para crear un nuevo Usuario, siempre y cuando haya memoria suficiente.
+ * @post Se reservará un espacio de memoria para la Usuario.
+ * @version 1.0
+ * @author Carlos Fdez.
+ */
+Usuario* crearUsuario(){
+
+	Usuario *u=0;
+	u = new Usuario;
+
+	if (u == 0){
+		cerr << "Error. No hay memoria suficiente para crear un nuevo usuario. Se abortará la ejecución" << endl;
+		exit(-1);
+	}
+	return u;
+}
+/**
+ * @brief Se borrará el espacio de memoria reservado a un Usuario, borrando primero los datos del Usuario que queremos borrar y después borramos los punteros.
+ * @post Se eliminará el espacio de memoria del usuario.
+ * @version 1.0
+ * @author Carlos Fdez.
+ */
+void borrarUsuario(Usuario *u){
+
+	//formateo a cero/nulo todos los datos que tiene un usuario
+	u->login= "";
+	u->nombre = "";
+	u->apellido = "";
+	u->perfil_usuario = "";
+	
+	u->dim_fotos = -1;
+	u->totalFotosUsuario = -1;
+	
+	//borro el fragmento de memoria
+	delete u;
+
+	//elimino la dirección que referenciaba al fragmento de memoria
+	u = 0;
 }
 					/*******************
 					****	SET	****
@@ -526,9 +568,16 @@ void MenuInicio(){
 int main(){
  
 	//Declaración de variables.
+	int dim_vfotos = 0;
+	int totalFotosUsuario = 0;
+	
+	Foto *v_fotos = new Foto[dim_vfotos]; //memoria dinámica: ME HE CREADO "tamanio" PERSONAS DINÁMICAS
+		if (dim_vfotos == 0){
+			cerr << "Error. No hay memoria suficiente. Se abortará la ejecución" << endl;
+			exit(-1);
+		}
  
- 
- 
+	UsuariosPredefinidos(Usuario *u); 
  
 	MenuInicio();
 
