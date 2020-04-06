@@ -43,7 +43,7 @@ struct Usuario{
 	string apellido;	//Apellido del usuario
 	string perfil_usuario;	// Nombre de videojuego
 	Foto* v_fotos;		//Vector Dinámico de Burbujas.
-	int dim_fotos;		//Dimensión del vector.
+	int dim_vfotos;		//Dimensión del vector.
 	int totalFotosUsuario;	//utiles del vector
 };
 
@@ -55,7 +55,7 @@ struct Usuario{
 
 struct TablaUsuarios{
 	Usuario** punteroapuntero;	//Vector Dinámico de Punteros a Burbuja.
-	int totaltuplas;		//La reserva siempre es exacta y al tamaño, la dimensión, siempre coincide con las útiles.
+	int TotalTuplas;		//La reserva siempre es exacta y al tamaño, la dimensión, siempre coincide con las útiles.
 };
 
 //set, get, crearTabla,eliminarTabla,InsertaUsuarioenTabla,eliminarUsuarioenTabla,etc
@@ -84,20 +84,21 @@ void setNombre(Usuario *u, string nombre);
 void setApellido(Usuario *u, string apellido);
 void setPerfilUsuario(Usuario *u, string perfil_usuario);
 //-----------------------------//
-string getLogin(Foto *u);
+string getLogin(Usuario *u);
 string getNombre(Usuario *u);
 string getApellido(Usuario *u);
 string getPerfilUsuario(Usuario *u);
 /*********************************************************************
  ** Implementación de los Prototipos del Tipo de Dato TablaUsuarios **
  ********************************************************************/
-
+void setTotalTuplas(TablaUsuario &tu, int TotalTuplas);
+int getTotalTupla(TablaUsuarios &tu);
 
 
 //********************************************************************************************************//
 
 /**
- * @brief Se reservará un espacio de memoria para crear una estructura Foto, siempre y cuando haya memoria suficiente.
+ * @brief Se reservará un espacio de memoria para crear una estructura de tipo Foto, siempre y cuando haya memoria suficiente.
  * @post Se reservará un espacio de memoria para la Foto.
  * @version 1.0
  * @author Carlos Fdez.
@@ -114,7 +115,7 @@ Foto* crearFoto(){
 	return f;
 }
 /**
- * @brief Módulo que borrará el espacio de memoria reservado a Foto, borrando primero los datos de la persona que queremos borrar y después borramos los punteros.
+ * @brief Módulo que borrará el espacio de memoria reservado a Foto, borrando primero los miembros y después borramos el punteros.
  * @param Foto *f		//Puntero de tipo foto.
  * @post Se reservará un espacio de memoria.
  * @version 1.0
@@ -122,56 +123,102 @@ Foto* crearFoto(){
  */
 void borrarFoto(Foto *f){
 
-    //formateo a cero/nulo todos los datos que tiene una persona
-    f->ruta = "";
-    f->tipo = "";
-    f->tamanio = -1;
+	//Ponemos a cero/null todos los datos que tiene la Foto
+	f->ruta = "";
+	f->tipo = "";
+	f->tamanio = -1;
 
-    //borro el fragmento de memoria
-    delete f;
+	//borro el fragmento de memoria
+	delete f;
 
-    //elimino la dirección que referenciaba al fragmento de memoria
-    f = 0;
+	//elimino la dirección que referenciaba al fragmento de memoria(puntero).
+	f = 0;
 }
 /**
- * @brief Se reservará un espacio de memoria para crear un nuevo Usuario, siempre y cuando haya memoria suficiente.
+ * @brief Se reservará un espacio de memoria para crear un nuevo Usuario y sus miembros, siempre y cuando haya memoria suficiente.
  * @post Se reservará un espacio de memoria para la Usuario.
  * @version 1.0
  * @author Carlos Fdez.
  */
 Usuario* crearUsuario(){
 
+	//Reservamos un nuevo espacio de memoria para el usuario y lo inicializamos.
 	Usuario *u=0;
 	u = new Usuario;
+	//Reservamos un nuevo espacio de memoria para el vector de fotos que lleva dentro el usuario.
+	u->v_fotos = new Foto[u->dim_vfotos];
 
-	if (u == 0){
-		cerr << "Error. No hay memoria suficiente para crear un nuevo usuario. Se abortará la ejecución" << endl;
-		exit(-1);
-	}
-	return u;
-}
-/**
- * @brief Se borrará el espacio de memoria reservado a un Usuario, borrando primero los datos del Usuario que queremos borrar y después borramos los punteros.
- * @post Se eliminará el espacio de memoria del usuario.
- * @version 1.0
- * @author Carlos Fdez.
- */
-void borrarUsuario(Usuario *u){
-
-	//formateo a cero/nulo todos los datos que tiene un usuario
-	u->login= "";
+	//Inicializamos el contenido del Usuario.
+	u->login = "";
 	u->nombre = "";
 	u->apellido = "";
 	u->perfil_usuario = "";
-	
-	u->dim_fotos = -1;
-	u->totalFotosUsuario = -1;
-	
+	u->v_fotos=0;	
+	u->dim_vfotos=0;
+	u->totalFotosUsuario=0;
+
+		//Si no hay memoria suficiente se aborta la ejecución y se sale del programa.
+		if (u == 0){
+			cerr << "Error. No hay memoria suficiente para crear un nuevo Usuario. Se abortará la ejecución" << endl;
+			exit(-1);
+		}
+
+		if (u->v_fotos == 0){
+			cerr << "Error. No hay memoria suficiente. Se abortará la ejecución" << endl;
+			exit(-1);
+		}
+
+	return u;
+
+}
+/**
+ * @brief Módulo que borrará el espacio de memoria reservado a un Usuario, borrando primero los datos del usuario y después borramos los punteros.
+ * @param Usuario *u		//Puntero de tipo foto.
+ * @post Se liberará un espacio de memoria al borrar a un usuario.
+ * @version 1.0
+ * @author Carlos Fdez.
+ */
+void eliminarUsuario(Usuario *u){
+
+	//Ponemos los datos del usuario a Null/-1 antes de eliminar el usuario.
+	u->login = "";
+	u->nombre = "";
+	u->apellido = "";
+	u->perfil_usuario = "";	
+	//borramos una por una las fotos del vector de fotos.
+	for(int i=0; i < u->totalFotosUsuario; i++){
+		borrarFoto(&u->v_fotos[i]);
+	}
+	u->dim_vfotos=-1;
+	u->totalFotosUsuario=-1;
+
 	//borro el fragmento de memoria
+	delete [] u->v_fotos;
 	delete u;
 
-	//elimino la dirección que referenciaba al fragmento de memoria
+	//elimino la dirección que referenciaba al fragmento de memoria(puntero).
 	u = 0;
+}
+/**
+ * @brief Este módulo crea una tabla de usuarios dónde almacenaremos a todos los usuario de nuestro Cristobook.
+ * @param 
+ * @param 
+ * @post Se creará un vector dinámico para almacenar a los usuarios.
+ * @version 1.0
+ * @author Carlos Fdez.
+ */
+void crearVectorUsuario(TablaUsuarios &tu){
+
+	//Declaración de variables.
+	int TotalTuplas=0;
+	Usuario** PunteroAPunteros[TotalTuplas];
+	
+
+	int DIM_TablaUsuarios = 0;
+	int util_TablaUsuarios = 0;
+	
+
+	
 }
 					/*******************
 					****	SET	****
@@ -202,7 +249,7 @@ void setTipo(Foto *f, string tipo){
  * @brief Este módulo se encarga de almacenar en el puntero de tipo Foto una variable de tipo long int llamada tamanio.
  * @param Foto *f		//Puntero de tipo foto.
  * @param unsigned long int tamanio.	//Tamaño de la foto, esto dependerá de el tipo del formato que tenga la foto.
- * @pre El tamanio no puede ser números negativos.
+ * @pre El tamanio no puede ser números negativos, por eso usamos "unsigned".
  * @post Nos devuelve la variable tamanio de un tipo estructurado de Foto.
  * @version 1.0
  * @author Carlos Fdez.
@@ -214,8 +261,8 @@ void setTamanio (Foto *f, unsigned long int tamanio){
 /**
  * @brief Este módulo se encarga de almacenar en el puntero de tipo Usuario una variable string llamada login.
  * @param Usuario *u		//Puntero de tipo Usuario.
- * @param string tipo		//Formato de la foto.
- * @post Se almacenará en la variable estructurada Foto el login del usuario.
+ * @param string login		//Login del usuario.
+ * @post Se almacenará en la variable estructurada Usuario el login del usuario.
  * @version 1.0
  * @author Carlos Fdez.
  */
@@ -225,8 +272,8 @@ void setLogin(Usuario *u, string login){
 /**
  * @brief Este módulo se encarga de almacenar en el puntero de tipo Usuario una variable string llamada nombre.
  * @param Usuario *u		//Puntero de tipo Usuario.
- * @param string nombre		//Formato de la foto.
- * @post Se almacenará en la variable estructurada Foto el nombre del usuario.
+ * @param string nombre		//nombre del usuario.
+ * @post Se almacenará en la variable estructurada Usuario el nombre del usuario.
  * @version 1.0
  * @author Carlos Fdez.
  */
@@ -236,8 +283,8 @@ void setNombre(Usuario *u, string nombre){
 /**
  * @brief Este módulo se encarga de almacenar en el puntero de tipo Usuario una variable string llamada apellido.
  * @param Usuario *u		//Puntero de tipo Usuario.
- * @param string apellido		//Formato de la foto.
- * @post Se almacenará en la variable estructurada Foto el apellido del usuario.
+ * @param string apellido	//Apellido del usuario.
+ * @post Se almacenará en la variable estructurada Usuario el apellido del usuario.
  * @version 1.0
  * @author Carlos Fdez.
  */
@@ -245,27 +292,61 @@ void setApellido(Usuario *u, string apellido){
     u->apellido = apellido;   
 }
 /**
-/**
  * @brief Este módulo se encarga de almacenar en el puntero de tipo Usuario una variable string llamada perfil_usuario que almacenará el nombre del juego al que el usuario quiere jugar.
- * @param Usuario *u		//Puntero de tipo Usuario.
+ * @param Usuario *u			//Puntero de tipo Usuario.
  * @param string perfil_usuario		//Nombre del juego al que juega el usuario.
- * @post Se almacenará en la variable estructurada Foto el juego favorito del usuario.
+ * @post Se almacenará en la variable estructurada Usuario el juego favorito del usuario.
  * @version 1.0
  * @author Carlos Fdez.
  */
 void setPerfilUsuario(Usuario *u, string perfil_usuario){ 
     u->perfil_usuario = perfil_usuario;
 }
-
-
-
-
-
-
-
-
-
-
+/**
+ * @brief Este módulo se encarga de almacenar en el puntero de tipo Usuario una variable int llamada dim_vfotos.
+ * @param Usuario *u		//Puntero de tipo Usuario.
+ * @param int dim_vfotos	//Dimensión de fotos que puede almacenar el usuario.
+ * @post Se almacenará en la variable estructurada Usuario la cantidad de fotos que puede almacenar del usuario.
+ * @version 1.0
+ * @author Carlos Fdez.
+ */
+void setV_Fotos(Usuario *u, Foto *f){
+    u->v_fotos = f;
+}
+/**
+ * @brief Este módulo se encarga de almacenar en el puntero de tipo Usuario una variable int llamada dim_vfotos.
+ * @param Usuario *u		//Puntero de tipo Usuario.
+ * @param int dim_vfotos	//Dimensión de fotos que puede almacenar el usuario.
+ * @post Se almacenará en la variable estructurada Usuario la cantidad de fotos que puede almacenar del usuario.
+ * @version 1.0
+ * @author Carlos Fdez.
+ */
+void setDIM_vFotos(Usuario *u, int dim_vfotos){
+    u->dim_vfotos = dim_vfotos;   
+}
+/**
+ * @brief Este módulo se encarga de almacenar en el puntero de tipo Usuario una variable int llamada totalFotosUsuario.
+ * @param Usuario *u		//Puntero de tipo Usuario.
+ * @param int totalFotosUsuario	//Total de fotos que almacena actualmente el usuario.
+ * @post Se almacenará en la variable estructurada Usuario el total de fotos que tiene actualmente el usuario del usuario.
+ * @version 1.0
+ * @author Carlos Fdez.
+ */
+void setTotalFotosUsuario(Usuario *u, int totalFotosUsuario){
+    u->totalFotosUsuario = totalFotosUsuario;   
+}
+/**
+ * @brief Este módulo se encarga de almacenar en el puntero de tipo TablaUsuario una variable int llamada TotalTuplas.
+ * @param 
+ * @param 
+ * @pre 
+ * @post 
+ * @version
+ * @author Carlos Fdez.
+ */
+void setTotalTuplas(TablaUsuario tu, int TotalTuplas){
+	tu.TotaltTuplas=TotalTuplas;
+}
 
 
 
@@ -273,7 +354,7 @@ void setPerfilUsuario(Usuario *u, string perfil_usuario){
 					****	GET	****
 					********************/
 /**
- * @brief Devuelve el puntero Ruta de una variable estructurada de tipo Persona.
+ * @brief Devuelve el puntero Ruta de una variable estructurada de tipo Foto.
  * @param Foto *f		//Puntero de tipo foto.
  * @version 1.0
  * @author Carlos Fdez.
@@ -282,7 +363,7 @@ string getRuta(Foto *f){
     return f->ruta;
 }
 /**
- * @brief Devuelve el puntero Tipo de una variable estructurada de tipo Persona.
+ * @brief Devuelve el puntero Tipo de una variable estructurada de tipo Foto.
  * @param Foto *f		//Puntero de tipo foto.
  * @version 1.0
  * @author Carlos Fdez.
@@ -291,7 +372,7 @@ string getTipo(Foto *f){
     return f->tipo;
 }
 /**
- * @brief Devuelve el Tamanio Ruta de una variable estructurada de tipo Persona.
+ * @brief Devuelve el Tamanio Ruta de una variable estructurada de tipo Foto.
  * @param Foto *f		//Puntero de tipo foto.
  * @pre Está filtrada al usar unsigned int para no introducir números negativos.
  * @post Nos devuelve la variable edad de un tipo estructurado de alumno.
@@ -303,7 +384,7 @@ int long unsigned getTamanio (Foto *f){
 }
 /**
  * @brief Devuelve el puntero Login de una variable estructurada de tipo Usuario.
- * @param Foto *f		//Puntero de tipo foto.
+ * @param Usuario *u		//Puntero de tipo Usuario.
  * @version 1.0
  * @author Carlos Fdez.
  */
@@ -312,7 +393,7 @@ string getLogin(Usuario *u){
 }
 /**
  * @brief Devuelve el puntero Nombre de una variable estructurada de tipo Usuario.
- * @param Foto *f		//Puntero de tipo foto.
+ * @param Usuario *u		//Puntero de tipo Usuario.
  * @version 1.0
  * @author Carlos Fdez.
  */
@@ -321,7 +402,7 @@ string getNombre(Usuario *u){
 }
 /**
  * @brief Devuelve el puntero Apellido de una variable estructurada de tipo Usuario.
- * @param Foto *f		//Puntero de tipo foto.
+ * @param Usuario *u		//Puntero de tipo Usuario.
  * @version 1.0
  * @author Carlos Fdez.
  */
@@ -330,80 +411,60 @@ string getApellido(Usuario *u){
 }
 /**
  * @brief Devuelve el puntero Perfil_Usuario de una variable estructurada de tipo Usuario.
- * @param Foto *f		//Puntero de tipo foto.
+ * @param Usuario *u		//Puntero de tipo Usuario.
  * @version 1.0
  * @author Carlos Fdez.
  */
 string getPerfilUsuario(Usuario *u){
     return u->perfil_usuario;
 }
-//----------------------------------------------------------//
 /**
- * @brief 
- * @param 
- * @param 
- * @pre 
- * @post 
- * @version
- * @author Carlos Fdez.
- */
-Usuario* crearUsuario(){
-
-	Usuario *u=0;
-	u = new Usuario;
-	u->v_fotos = new Foto[u->dim_fotos];
-
-	u->login = "";
-	u->nombre = "";
-	u->apellido = "";
-	u->perfil_usuario = "";
-	u->v_fotos=0;	
-	u->dim_fotos=0;
-	u->totalFotosUsuario=0;
-
-		if (u == 0){
-			cerr << "Error. No hay memoria suficiente para crear una foto nueva. Se abortará la ejecución" << endl;
-			exit(-1);
-		}
-
-		if (u->v_fotos == 0){
-			cerr << "Error. No hay memoria suficiente. Se abortará la ejecución" << endl;
-			exit(-1);
-		}
-
-	return u;
-
-}
-/**
- * @brief Módulo que borrará el espacio de memoria reservado a Foto, borrando primero los datos de la persona que queremos borrar y después borramos los punteros.
- * @param Foto *f		//Puntero de tipo foto.
- * @post Se reservará un espacio de memoria.
+ * @brief Devuelve el puntero Perfil_Usuario de una variable estructurada de tipo Usuario.
+ * @param Usuario *u		//Puntero de tipo Usuario.
  * @version 1.0
  * @author Carlos Fdez.
  */
-void eliminarUsuario(Usuario *u){
+/*string getv_Fotos(Usuario *u){
 
-	//formateo a cero/nulo todos los datos que tiene una persona
-	u->login = "";
-	u->nombre = "";
-	u->apellido = "";
-	u->perfil_usuario = "";	
-	
-	for(int i=0; i < u->totalFotosUsuario; i++){
-		borrarFoto(&u->v_fotos[i]);
-	}
-	
-	u->dim_fotos=-1;
-	u->totalFotosUsuario=-1;
 
-	//borro el fragmento de memoria
-	delete [] u->v_fotos;
-	delete u;
-
-	//elimino la dirección que referenciaba al fragmento de memoria
-	u = 0;
+    return u->perfil_usuario;
+}*/
+/**
+ * @brief Devuelve el puntero dim_vfotos de una variable estructurada de tipo Usuario.
+ * @param Usuario *u		//Puntero de tipo Usuario.
+ * @version 1.0
+ * @author Carlos Fdez.
+ */
+int getDIM_vfotos(Usuario *u){
+    return u->dim_vfotos;
 }
-void UsuariosPredefinidos(Usuario *u){
+/**
+ * @brief Devuelve el puntero totalFotosUsuario de una variable estructurada de tipo Usuario.
+ * @param Usuario *u		//Puntero de tipo Usuario.
+ * @version 1.0
+ * @author Carlos Fdez.
+ */
+int getTotalFotosUsuario(Usuario *u){
+    return u->totalFotosUsuario;
+}
+/**
+ * @brief Devuelve el puntero totalFotosUsuario de una variable estructurada de tipo Usuario.
+ * @param Usuario *u		//Puntero de tipo Usuario.
+ * @version 1.0
+ * @author Carlos Fdez.
+ */
+int getTotalTupla(TablaUsuarios &tu){
+	return TablaUsuario->TotalTuplas;
+}
+//----------------------------------------------------------//
+/**
+ * @brief Módulo que se encarga de almacenar en la Tabla de Usuarios algunos usuarios predefinidos.
+ * @pre Deberemos tener bien hechos los Set para que no fallen al insertar los usuarios predefinidos.
+ * @post Los usuarios serán introducidos en la Tabla de Usuarios.
+ * @version 2.2
+ * @author Carlos Fdez.
+ */
+/*void UsuariosPredefinidos(){
 
 	//Usuarios predefinidos.
 	Usuario *Carlos;
@@ -417,7 +478,7 @@ void UsuariosPredefinidos(Usuario *u){
 	/***************************************
 	**************	CARLOS	****************
 	****************************************/
-	setLogin(Carlos, "CarlosCristoRey");
+/*	setLogin(Carlos, "CarlosCristoRey");
 	setNombre(Carlos, "Carlos");
 	setApellido(Carlos, "Fernández");
 	setPerfilUsuario(Carlos, "Fifa");
@@ -425,7 +486,7 @@ void UsuariosPredefinidos(Usuario *u){
 	/***************************************
 	**************	JAIME	****************
 	****************************************/	
-	setLogin(Jaime, "JaimeCristoRey");
+/*	setLogin(Jaime, "JaimeCristoRey");
 	setNombre(Jaime, "Jaime");
 	setApellido(Jaime, "Cabezas");
 	setPerfilUsuario(Jaime, "Minecraft");
@@ -433,7 +494,7 @@ void UsuariosPredefinidos(Usuario *u){
 	/***************************************
 	********	CRISTIAN	********
 	****************************************/	
-	setLogin(Cristian, "CristianCristoRey");
+/*	setLogin(Cristian, "CristianCristoRey");
 	setNombre(Cristian, "Cristian");
 	setApellido(Cristian, "Campos");
 	setPerfilUsuario(Cristian, "Footbal Manager");
@@ -441,7 +502,7 @@ void UsuariosPredefinidos(Usuario *u){
 	/***************************************
 	**************	ADRIAN	****************
 	****************************************/	
-	setLogin(Adrian, "AdrianCristoRey");
+/*	setLogin(Adrian, "AdrianCristoRey");
 	setNombre(Adrian, "Adrián");
 	setApellido(Adrian, "Castillo");
 	setPerfilUsuario(Adrian, "Counter Strike");
@@ -449,7 +510,7 @@ void UsuariosPredefinidos(Usuario *u){
 	/***************************************
 	**************	JESUS	****************
 	****************************************/	
-	setLogin(Jesus, "JesusCristoRey");
+/*	setLogin(Jesus, "JesusCristoRey");
 	setNombre(Jesus, "Jesús");
 	setApellido(Jesus, "Rey");
 	setPerfilUsuario(Jesus, "GTA V");
@@ -457,7 +518,7 @@ void UsuariosPredefinidos(Usuario *u){
 	/***************************************
 	**************	PABLO	****************
 	****************************************/	
-	setLogin(Pablo, "PabloCristoRey");
+/*	setLogin(Pablo, "PabloCristoRey");
 	setNombre(Pablo, "Pablo");
 	setApellido(Pablo, "García");
 	setPerfilUsuario(Pablo, "Counter Strike");
@@ -465,23 +526,49 @@ void UsuariosPredefinidos(Usuario *u){
 	/***************************************
 	**************	  ANA	****************
 	****************************************/	
-	setLogin(Ana, "AnaCristoRey");
+/*	setLogin(Ana, "AnaCristoRey");
 	setNombre(Ana, "Ana");
 	setApellido(Ana, "Tallón");
 	setPerfilUsuario(Ana, "Animal Crossing");
-}
+}*/
 //********************************************************************************************************//
 
-
-
-
-
-
 /**
- * @brief Imprime por pantalla el nombre completo de la foto.
- * @param const Fecha F(E/S)
- * @pre Los módulos getDia, getMes y getAnio deben de tener ya algún valor introducido.
- * @post Imprimiremos la fecha por pantalla.
+ * @brief Imprime por pantalla el contenido de una variable estructurada de tipo Usuario.
+ * @param const Alumno a (E/S)
+ * @pre El nombre, la edad y los nombres de las asignaturas deberán contener caracteres válidos.
+ * @post Imprimir por pantalla la información del contenido del tipo Alumno seleccionado.
+ * @version 1.0
+ * @author Carlos Fdez.
+ */
+void printUsuario(Usuario *u){
+
+	cout << YELLOW << "****************************************" << endl;
+	cout << YELLOW <<  "Login: " << DEFAULT << getLogin(u) << endl;
+	cout << YELLOW << "Nombre: " << DEFAULT <<  getNombre(u) << endl;
+	cout << YELLOW << "Apellido: " << DEFAULT <<  getNombre(u) << endl;
+	cout << YELLOW << "Este usuario tiene: " << DEFAULT << getTotalFotosUsuario(u) << endl;
+	cout << YELLOW << "--------------------------" << DEFAULT << endl;
+
+}
+/**
+ * @brief Imprime por pantalla el vector de Usuarios.
+ * @param Usuario *PunterosAPunteros	//Vector de punteros de usuarios.
+ * @param int TotalTuplas		//Útiles del vector.
+ * @pre Las utiles deberán de estar filtradas para no superar la dimensión del vector.
+ * @post Se mostará por pantalla el vector de usuarios
+ * @version
+ * @author Carlos Fdez.
+ */
+void printVectorUsuario(Usuario *PunterosAPunteros, int TotalTuplas){
+    for(int i=0; i < TotalTuplas; i++)
+        printUsuario(&PunterosAPunteros[i]);
+}
+/**
+ * @brief Imprime por pantalla la ruta de la foto junto a su tipo y el tamaño que ocupa la foto.
+ * @param Foto *f
+ * @pre Los módulos getRuta, getTipo y getTamanio deben de tener ya algún valor introducido.
+ * @post Imprimiremos la ruta de la foto por pantalla.
  * @version 1.0
  * @author Carlos Fdez.
  */
@@ -540,6 +627,7 @@ void MenuInicio(){
 				case 2:
 					break;
 				case 3:
+					
 					break;
 				case 4:		
 					break;
@@ -559,29 +647,95 @@ void MenuInicio(){
 					cout << BLUE << "----------SALIENDO----------\n" << DEFAULT << endl;
 					break;
 				default:
-					cout << YELLOW << "\nLa opción seleccionada no es correcta. " << DEFAULT << endl;
+					cout << YELLOW << "\nLo siento, la opción seleccionada no es correcta. " << DEFAULT << endl;
 			}
-		
 	}
 }
 //********************************************************************************************************//
 int main(){
- 
-	//Declaración de variables.
-	int dim_vfotos = 0;
-	int totalFotosUsuario = 0;
-	
-	Foto *v_fotos = new Foto[dim_vfotos]; //memoria dinámica: ME HE CREADO "tamanio" PERSONAS DINÁMICAS
-		if (dim_vfotos == 0){
-			cerr << "Error. No hay memoria suficiente. Se abortará la ejecución" << endl;
-			exit(-1);
-		}
- 
-	UsuariosPredefinidos(Usuario *u); 
- 
-	MenuInicio();
 
- 
- 
- 
+	//Declaración de variables.
+	int DIM_PunterosAPunteros = 20;
+	int TotalTuplas = 0;
+	Usuario PunterosAPunteros[TotalTuplas];
+	
+	TablaUsuario CristoBook;
+	
+	
+	//Usuarios predefinidos.
+	Usuario *Carlos=0;
+	Usuario *Jaime=0;
+	Usuario *Cristian=0;
+	Usuario *Adrian=0;
+	Usuario *Jesus=0;
+	Usuario *Pablo=0;
+	Usuario *Ana=0;
+
+	Carlos = CrearUsuario();
+	Cristobook.PunteroAPuntero[Cristobook.TotalTuplas] = &Carlos;	//getTotalTuplas.
+	CristoBook.TotalTuplas++;
+	
+	//InsertarTabla
+	//Paso &Carlos y Cristobok.PunteroAPuntero = Usuario &u;
+	//Llamar Resize aumentar.
+	
+	
+	/***************************************
+	**************	CARLOS	****************
+	****************************************/
+	setLogin(Carlos, "CarlosCristoRey");
+	setNombre(Carlos, "Carlos");
+	setApellido(Carlos, "Fernández");
+	setPerfilUsuario(Carlos, "FIFA");
+	
+	/***************************************
+	**************	JAIME	****************
+	****************************************/	
+	setLogin(Jaime, "JaimeCristoRey");
+	setNombre(Jaime, "Jaime");
+	setApellido(Jaime, "Cabezas");
+	setPerfilUsuario(Jaime, "Minecraft");
+	
+	/***************************************
+	********	CRISTIAN	********
+	****************************************/
+	setLogin(Cristian, "CristianCristoRey");
+	setNombre(Cristian, "Cristian");
+	setApellido(Cristian, "Campos");
+	setPerfilUsuario(Cristian, "Footbal Manager");
+	
+	/***************************************
+	**************	ADRIAN	****************
+	****************************************/
+	setLogin(Adrian, "AdrianCristoRey");
+	setNombre(Adrian, "Adrián");
+	setApellido(Adrian, "Castillo");
+	setPerfilUsuario(Adrian, "Counter Strike");
+	
+	/***************************************
+	**************	JESUS	****************
+	****************************************/
+	setLogin(Jesus, "JesusCristoRey");
+	setNombre(Jesus, "Jesús");
+	setApellido(Jesus, "Rey");
+	setPerfilUsuario(Jesus, "GTA V");
+	
+	/***************************************
+	**************	PABLO	****************
+	****************************************/
+	setLogin(Pablo, "PabloCristoRey");
+	setNombre(Pablo, "Pablo");
+	setApellido(Pablo, "García");
+	setPerfilUsuario(Pablo, "Counter Strike");
+	
+	/***************************************
+	**************	  ANA	****************
+	****************************************/
+	setLogin(Ana, "AnaCristoRey");
+	setNombre(Ana, "Ana");
+	setApellido(Ana, "Tallón");
+	setPerfilUsuario(Ana, "Animal Crossing");
+		
+	//UsuariosPredefinidos();
+	//MenuInicio(); 
 }
