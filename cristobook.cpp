@@ -149,13 +149,14 @@ Usuario* crearUsuario(){
 	//Reservamos un nuevo espacio de memoria para el usuario y lo inicializamos.
 	Usuario *u = 0;
 	u = new Usuario;
+	
 	//Inicializamos el contenido del Usuario.
 	u->login = "";
 	u->nombre = "";
 	u->apellido = "";
 	u->perfil_usuario = "";
 
-	u->v_fotos=0;	
+	u->v_fotos=0;
 	u->dim_vfotos=0;
 	u->totalFotosUsuario=0;
 	//Reservamos un nuevo espacio de memoria para el vector de fotos que lleva dentro el usuario.
@@ -182,7 +183,7 @@ Usuario* crearUsuario(){
  * @version 1.0
  * @author Carlos Fdez.
  */
-void eliminarUsuario(Usuario *u){
+void borrarUsuario(Usuario *u){
 
 	//Ponemos los datos del usuario a Null/-1 antes de eliminar el usuario.
 	u->login = "";
@@ -210,24 +211,21 @@ void eliminarUsuario(Usuario *u){
  * @version 1.0
  * @author Carlos Fdez.
  */
-/*TablaUsuarios* crearTablaUsuarios(){
+TablaUsuarios crearTablaUsuarios(){
 
 	//Reservamos un nuevo espacio de memoria para el usuario y lo inicializamos.
-	TablaUsuarios *tu=0;
-	tu = new TablaUsuarios;
-	int TotalTuplas=0;
+	TablaUsuarios tu;
 	
+	tu.TotalTuplas=7;
+	tu.punteroapuntero=0;
 	//Reservamos un nuevo espacio de memoria para el vector de fotos que lleva dentro el usuario.
-	//tu-> = new PunteroAPunteros[TotalTuplas];
+	tu.punteroapuntero = new Usuario*[tu.TotalTuplas];
 
-	//Inicializamos el contenido del Usuario.
-	tu->TotalTuplas=0;
-
-		//Si no hay memoria suficiente se aborta la ejecución y se sale del programa.
-		if (tu == 0){
-			cerr << "Error. No hay memoria suficiente para crear una nueva TablaUsuarios. Se abortará la ejecución" << endl;
-			exit(-1);
-		}
+	//Si no hay memoria suficiente se aborta la ejecución y se sale del programa.
+	if (tu.punteroapuntero == 0){
+		cerr << "Error. No hay memoria suficiente para crear una nueva TablaUsuarios. Se abortará la ejecución" << endl;
+		exit(-1);
+	}
 
 	return tu;
 }
@@ -435,26 +433,6 @@ string getPerfilUsuario(Usuario *u){
     return u->perfil_usuario;
 }
 /**
- * @brief Devuelve el puntero Perfil_Usuario de una variable estructurada de tipo Usuario.
- * @param Usuario *u		//Puntero de tipo Usuario.
- * @version 1.0
- * @author Carlos Fdez.
- */
-/*string getv_Fotos(Usuario *u){
-
-
-    return u->perfil_usuario;
-}*/
-/**
- * @brief Devuelve el puntero dim_vfotos de una variable estructurada de tipo Usuario.
- * @param Usuario *u		//Puntero de tipo Usuario.
- * @version 1.0
- * @author Carlos Fdez.
- */
-int getDIM_vfotos(Usuario *u){
-    return u->dim_vfotos;
-}
-/**
  * @brief Devuelve el puntero totalFotosUsuario de una variable estructurada de tipo Usuario.
  * @param Usuario *u		//Puntero de tipo Usuario.
  * @version 1.0
@@ -466,127 +444,32 @@ int getTotalFotosUsuario(Usuario *u){
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /**
  * @brief Devuelve el puntero totalFotosUsuario de una variable estructurada de tipo Usuario.
- * @param Usuario *u		//Puntero de tipo Usuario.
+ * @param TablaUsuarios tu
  * @version 1.0
  * @author Carlos Fdez.
  */
-int getTotalTupla(TablaUsuarios &tu){
+int getTotalTuplas(TablaUsuarios tu){
 	return tu.TotalTuplas;
 }
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //----------------------------------------------------------//
-void insertarUsuarioTablaUsuarios(Usuario *u,TablaUsuarios tu){
 
-	if (totalTuplas <= 20){
-		tu.punteroapuntero[tu.totalTuplas] = u;
-		cout << "El usuario se ha insertado correctamente. " << endl;
-	}else
-		cout <<"No hay más espacio." << endl;
-		
-		
-}
-/**
- * @brief Módulo que se encarga de almacenar en la Tabla de Usuarios algunos usuarios predefinidos.
- * @pre Deberemos tener bien hechos los Set para que no fallen al insertar los usuarios predefinidos.
- * @post Los usuarios serán introducidos en la Tabla de Usuarios.
- * @version 2.2
- * @author Carlos Fdez.
- */
-void UsuariosPredefinidos(TablaUsuarios tu){
-
-	//Usuarios predefinidos.
-	Usuario *Carlos=0;
-	Usuario *Jaime=0;
-	Usuario *Cristian=0;
-	Usuario *Adrian=0;
-	Usuario *Jesus=0;
-	Usuario *Pablo=0;
-	Usuario *Ana=0;
-	
-	
-	/***************************************
-	**************	CARLOS	****************
-	****************************************/
-	Carlos =  crearUsuario();
-	setLogin(Carlos, "@CarlosCristoRey");
-	setNombre(Carlos, "Carlos");
-	setApellido(Carlos, "Fernández");
-	setPerfilUsuario(Carlos, "FIFA");
-	insertarUsuarioTablaUsuarios(Carlos,tu);
-	
-	
-	/***************************************
-	**************	JAIME	****************
-	****************************************/	
-	Jaime = crearUsuario();
-	setLogin(Jaime, "@JaimeCristoRey");
-	setNombre(Jaime, "Jaime");
-	setApellido(Jaime, "Cabezas");
-	setPerfilUsuario(Jaime, "Minecraft");
-	insertarUsuarioTablaUsuarios(Jaime,tu);
-	/***************************************
-	********	CRISTIAN	********
-	****************************************/
-	Cristian =  crearUsuario();
-	setLogin(Cristian, "@CristianCristoRey");
-	setNombre(Cristian, "Cristian");
-	setApellido(Cristian, "Campos");
-	setPerfilUsuario(Cristian, "Footbal Manager");
-	insertarUsuarioTablaUsuarios(Cristian,tu);
-	/***************************************
-	**************	ADRIAN	****************
-	****************************************/
-	Adrian =  crearUsuario();
-	setLogin(Adrian, "@AdrianCristoRey");
-	setNombre(Adrian, "Adrián");
-	setApellido(Adrian, "Castillo");
-	setPerfilUsuario(Adrian, "Counter Strike");
-	insertarUsuarioTablaUsuarios(Adrian,tu);
-	/***************************************
-	**************	JESUS	****************
-	****************************************/
-	Jesus = crearUsuario();
-	setLogin(Jesus, "@JesusCristoRey");
-	setNombre(Jesus, "Jesús");
-	setApellido(Jesus, "Rey");
-	setPerfilUsuario(Jesus, "GTA V");
-	
-	/***************************************
-	**************	PABLO	****************
-	****************************************/
-	Pablo =  crearUsuario();
-	setLogin(Pablo, "@PabloCristoRey");
-	setNombre(Pablo, "Pablo");
-	setApellido(Pablo, "García");
-	setPerfilUsuario(Pablo, "Counter Strike");
-	
-	/***************************************
-	**************	  ANA	****************
-	****************************************/
-	Ana =  crearUsuario();
-	setLogin(Ana, "@AnaCristoRey");
-	setNombre(Ana, "Ana");
-	setApellido(Ana, "Tallón");
-	setPerfilUsuario(Ana, "Animal Crossing");
-
-
-	
-}
-/**
- * @brief En éste módulo insertaremos los usuarios predefinidos en una TablaUsuarios que hemos creado previamente.
- * @param TablaUsuarios &tu	//
- * @pre Deberemos haber creado la tabla de usuarios previamente.
- * @post Insertaremos en la tabla de usuarios los usuarios que querámos.
- * @version
- * @author Carlos Fdez.
- */
- void insertarUsuariosTabla(TablaUsuarios &tu, Usuario *u){
-
-	 
- 
- 
- }
 //********************************************************************************************************/
+/**
+ * @brief Imprime por pantalla la ruta de la foto junto a su tipo y el tamaño que ocupa la foto.
+ * @param Foto *f
+ * @pre Los módulos getRuta, getTipo y getTamanio deben de tener ya algún valor introducido.
+ * @post Imprimiremos la ruta de la foto por pantalla.
+ * @version 1.0
+ * @author Carlos Fdez.
+ */
+void printFoto(Foto *f){
+
+	cout << "Ruta : " << getRuta(f) << endl;
+	cout << "Tipo : " << getTipo(f) << endl;
+	cout << "Tamaño : " << getTamanio(f) << endl;
+	
+}
 /**
  * @brief Imprime por pantalla el contenido de una variable estructurada de tipo Usuario.
  * @param Usuario *u
@@ -600,34 +483,233 @@ void printUsuario(Usuario *u){
 	cout << YELLOW << "****************************************" << endl;
 	cout << YELLOW <<  "Login: " << DEFAULT << getLogin(u) << endl;
 	cout << YELLOW << "Nombre: " << DEFAULT <<  getNombre(u) << endl;
-	cout << YELLOW << "Apellido: " << DEFAULT <<  getNombre(u) << endl;
-	cout << YELLOW << "Este usuario tiene: " << DEFAULT << getTotalFotosUsuario(u) << endl;
+	cout << YELLOW << "Apellido: " << DEFAULT <<  getApellido(u) << endl;
+	cout << YELLOW << "Perfil de usuarios: " << DEFAULT <<  getPerfilUsuario(u) << endl;
 	cout << YELLOW << "--------------------------" << DEFAULT << endl;
+	
+	if(getTotalFotosUsuario(u) != 0){
+		for(int i= 0; i < getTotalFotosUsuario(u);i++){
+			cout << " Foto número : " << i << endl;
+			printFoto(&u->v_fotos[i]);
+			cout << YELLOW << "****************************************" << DEFAULT << endl;
+		}
+	}else
+		cout << YELLOW << "Este usuario no tiene fotos. " << DEFAULT << endl;
 
 }
 /**
- * @brief Imprime por pantalla el vector de Usuarios.
- * @param Usuario *PunterosAPunteros	//Vector de punteros de usuarios.
- * @param int TotalTuplas		//Útiles del vector.
- * @pre Las utiles deberán de estar filtradas para no superar la dimensión del vector.
- * @post Se mostará por pantalla el vector de usuarios
- * @version
- * @author Carlos Fdez.
- */
-void printVectorUsuario(Usuario *PunterosAPunteros, int TotalTuplas){
-    for(int i=0; i < TotalTuplas; i++)
-        printUsuario(&PunterosAPunteros[i]);
-}
-/**
- * @brief Imprime por pantalla la ruta de la foto junto a su tipo y el tamaño que ocupa la foto.
- * @param Foto *f
- * @pre Los módulos getRuta, getTipo y getTamanio deben de tener ya algún valor introducido.
- * @post Imprimiremos la ruta de la foto por pantalla.
+ * @brief Éste módulo se encarga de imprimir la TablaUsuarios.
+ * @param TablaUsuarios &tu
+ * @pre La tabla de Usuarios debe de estar creada.
+ * @post Mostrará todos los usuarios insertados en a tabla.
  * @version 1.0
  * @author Carlos Fdez.
  */
-void printNombreFoto(Foto *f){
-	cout << getRuta(f) << "." << getTipo(f) << "-" << getTamanio(f) << endl;
+void printTablaUsuarios(TablaUsuarios &tu){
+
+	for(int i = 0;i < getTotalTuplas(tu);i++)
+		printUsuario(tu.punteroapuntero[i]);
+
+}
+/**
+ * @brief En éste módulo insertaremos los usuarios predefinidos en una TablaUsuarios que hemos creado previamente.
+ * @param TablaUsuarios &tu	//
+ * @pre Deberemos haber creado la tabla de usuarios previamente.
+ * @post Insertaremos en la tabla de usuarios los usuarios que querámos.
+ * @version
+ * @author Carlos Fdez.
+ */
+void insertarUsuarioTablaUsuarios(Usuario *u,TablaUsuarios tu){
+
+	if (getTotalTuplas(tu) <= 20){
+		tu.punteroapuntero[getTotalTuplas(tu)] = u;
+	}else
+		cout <<"No hay más espacio." << endl;
+	
+	
+}
+
+/**
+ * @brief Módulo que se encarga de almacenar en la Tabla de Usuarios algunos usuarios predefinidos.
+ * @pre Deberemos tener bien hechos los Set para que no fallen al insertar los usuarios predefinidos.
+ * @post Los usuarios serán introducidos en la Tabla de Usuarios.
+ * @version 2.2
+ * @author Carlos Fdez.
+ */
+void UsuariosPredefinidos(TablaUsuarios &tu){
+
+	//Usuarios predefinidos.
+	Usuario *Carlos=0;
+	Usuario *Jaime=0;
+	Usuario *Cristian=0;
+	Usuario *Adrian=0;
+	Usuario *Jesus=0;
+	Usuario *Pablo=0;
+	Usuario *Ana=0;
+		
+	/***************************************
+	**************	CARLOS	****************
+	****************************************/
+	Carlos =  crearUsuario();
+	setLogin(Carlos, "@CarlosCristoRey");
+	setNombre(Carlos, "Carlos");
+	setApellido(Carlos, "Fernández");
+	setPerfilUsuario(Carlos, "FIFA");
+	insertarUsuarioTablaUsuarios(Carlos,tu);
+	setTotalTuplas(tu,0);
+	
+	/***************************************
+	**************	JAIME	****************
+	****************************************/	
+	Jaime = crearUsuario();
+	setLogin(Jaime, "@JaimeCristoRey");
+	setNombre(Jaime, "Jaime");
+	setApellido(Jaime, "Cabezas");
+	setPerfilUsuario(Jaime, "Minecraft");
+	insertarUsuarioTablaUsuarios(Jaime,tu);
+	setTotalTuplas(tu,1);
+	
+	/***************************************
+	********	CRISTIAN	********
+	****************************************/
+	Cristian =  crearUsuario();
+	setLogin(Cristian, "@CristianCristoRey");
+	setNombre(Cristian, "Cristian");
+	setApellido(Cristian, "Campos");
+	setPerfilUsuario(Cristian, "Footbal Manager");
+	insertarUsuarioTablaUsuarios(Cristian,tu);
+	setTotalTuplas(tu,2);
+	
+	/***************************************
+	**************	ADRIAN	****************
+	****************************************/
+	Adrian =  crearUsuario();
+	setLogin(Adrian, "@AdrianCristoRey");
+	setNombre(Adrian, "Adrián");
+	setApellido(Adrian, "Castillo");
+	setPerfilUsuario(Adrian, "Counter Strike");
+	insertarUsuarioTablaUsuarios(Adrian,tu);
+	setTotalTuplas(tu,3);
+	
+	/***************************************
+	**************	JESUS	****************
+	****************************************/
+	Jesus = crearUsuario();
+	setLogin(Jesus, "@JesusCristoRey");
+	setNombre(Jesus, "Jesús");
+	setApellido(Jesus, "Rey");
+	setPerfilUsuario(Jesus, "GTA V");
+	insertarUsuarioTablaUsuarios(Jesus,tu);
+	setTotalTuplas(tu,4);
+	
+	/***************************************
+	**************	PABLO	****************
+	****************************************/
+	Pablo =  crearUsuario();
+	setLogin(Pablo, "@PabloCristoRey");
+	setNombre(Pablo, "Pablo");
+	setApellido(Pablo, "García");
+	setPerfilUsuario(Pablo, "Counter Strike");
+	insertarUsuarioTablaUsuarios(Pablo,tu);
+	setTotalTuplas(tu,5);
+	
+	/***************************************
+	**************	  ANA	****************
+	****************************************/
+	Ana =  crearUsuario();
+	setLogin(Ana, "@AnaCristoRey");
+	setNombre(Ana, "Ana");
+	setApellido(Ana, "Tallón");
+	setPerfilUsuario(Ana, "Animal Crossing");
+	insertarUsuarioTablaUsuarios(Ana,tu);
+	setTotalTuplas(tu,6);
+	
+}
+void comprobacionLogin(string login,Usuario *u,bool &usado){
+
+	if(login == u->login){
+		cout << "El login del usuario esta repetido." <<endl;
+		usado = true;	
+	}
+
+}
+void pedirDatosUsuario(Usuario *u){
+
+	string nombre;
+	string apellido;
+	string perfilUsuario;
+	
+	cout << " Dime el nombre: " << endl;
+	cin>>nombre;
+	cout << YELLOW << "Apellido: " << DEFAULT << endl;
+	cin>>apellido;
+	cout << YELLOW << "Perfil de usuarios: " << DEFAULT  << endl;
+	cin >> perfilUsuario;
+	
+	setNombre(u,nombre);
+	setApellido(u,apellido);
+	setPerfilUsuario(u,perfilUsuario);
+	
+
+}
+/**
+ * @brief Cambia la dimensión del vector a una nueva DIM_nueva
+	 *  1) Creo un vector nuevo con la nueva dimension +1
+	 *  2) Copio el contenido del vector que me pasan, en el nuevo vector (OJO SI ES MÁS GRANDE)
+	 *  3) Libero la memoria del vector que me pasan
+	 *  4) Devuelvo el puntero del nuevo vector
+ * @param Persona *v
+ * @param int util_v
+ * @param int DIM_actual(E/S)
+ * @post Aumentaremos en uno la dimensión de nuestro vector.
+ * @version 1.0
+ * @author Carlos Fdez.
+ */
+Usuario** resizeAumentarPorPunteros(Usuario **v, int &util_actual){
+	
+	int DIM_nueva = util_actual+1;
+
+	Usuario **vector_Nuevo = 0;
+	
+	vector_Nuevo = new Usuario*[DIM_nueva]; //memoria dinámica: ME HE CREADO "tamanio" PERSONAS DINÁMICAS
+	cout << "@DEbug : esta cortando la ejecucion aqui" << endl;
+	if (vector_Nuevo == 0){
+		cerr << "Error. No hay memoria suficiente. Se abortará la ejecución" << endl;
+		exit(-1);
+	}
+	for(int i = 0;i < util_actual;i++)
+		vector_Nuevo[i]=v[i];
+
+	delete [] v;
+	v = 0;
+
+	util_actual = DIM_nueva;
+
+	return vector_Nuevo;
+}
+void insertarUsuarioNuevo(TablaUsuarios &tu){
+
+	string login = "";
+	bool usado = false;	
+	
+	cout << "Dime el login : " << endl;
+	cin>>login;
+	
+	for(int i = 0;i < tu.TotalTuplas;i++)
+		comprobacionLogin(login,tu.punteroapuntero[i],usado);	
+	
+	if(usado != true){
+	
+		Usuario *u = 0;	
+		u = crearUsuario();
+		setLogin(u,login);
+		pedirDatosUsuario(u);
+		tu.
+		punteroapuntero = resizeAumentarPorPunteros(tu.punteroapuntero,tu.TotalTuplas);
+		insertarUsuarioTablaUsuarios(u,tu);
+		
+	}
+		
 }
 /**
  * @brief Este módulo sólo muestra por pantalla el menú de opciones que tenemos disponibles.
@@ -668,6 +750,8 @@ void MenuInicio(){
 
 	//Declaración de variables.
 	int opcion=0;
+	TablaUsuarios tu;
+	bool tabla=false;
 	
 	while(opcion!=11){
 		MostrarMenu();
@@ -675,50 +759,123 @@ void MenuInicio(){
 		cin >> opcion;
 	
 			switch (opcion){
+
 				case 1:
-					//CrearTablaUsuarios();
-					break;
-				case 2:
-					break;
-				case 3:
+					if(tabla==false){
+						cout  << " ****    CREANDO TABLA DE USUARIOS    **** " << endl;
+						tu = crearTablaUsuarios();
+						UsuariosPredefinidos(tu);
+						cout << "La tabla de usuarios se ha creado."<< endl;
+						tabla=true;
+					}else{
+						cout << RED << "La tabla de usuarios ya está creada, por favor elige otra opción." << DEFAULT << endl;
+						}
 					
-					break;
+				break;
+				
+				case 2:
+					if(tabla){
+						tabla=false;
+						cout << RED << "La tabla de usuarios se eliminó correctamente." << DEFAULT << endl;
+					}else{
+						
+						
+						}
+				break;
+				
+				case 3:
+					if(tabla){
+						cout << "\n *****   IMPRIMIENDO USUARIOS	*****" << endl;
+						printTablaUsuarios(tu);
+					}else{
+						
+						
+						}
+				break;
+				
 				case 4:		
-					break;
+					if(tabla){
+						cout << "****** INSERTAR USUARIO ********" << endl;
+						insertarUsuarioNuevo(tu);
+					}else{
+						
+						
+						}
+				break;
+				
 				case 5:		
-					break;
+					if(tabla){
+					
+					}else{
+						
+						
+						}
+				break;
+				
 				case 6:		
-					break;
+					if(tabla){
+					
+					}else{
+						
+						
+						}
+				break;
+				
 				case 7:		
-					break;
+					if(tabla){
+					
+					}else{
+						
+						
+						}
+				break;
+				
 				case 8:		
-					break;
-				case 9:		
-					break;
+					if(tabla){
+					
+					}else{
+						
+						
+						}
+				break;
+				
+				case 9:	
+					if(tabla){
+					
+					}else{
+						
+						
+						}	
+				
+				break;
+				
 				case 10:		
-					break;
+					if(tabla){
+					
+					}else{
+						
+						
+						}
+				break;
+				
 				case 11:
-					cout << BLUE << "----------SALIENDO----------\n" << DEFAULT << endl;
-					break;
+					if(tabla){
+					
+						cout << BLUE << "----------SALIENDO----------\n" << DEFAULT << endl;
+					}else{
+						
+						
+						}
+					
+				break;
+				
 				default:
 					cout << YELLOW << "\nLo siento, la opción seleccionada no es correcta. " << DEFAULT << endl;
 			}
 	}
 }
 //********************************************************************************************************//
-int main(){
-
-
-	//Carlos = CrearUsuario();
-	//Cristobook.PunteroAPuntero[Cristobook.TotalTuplas] = &Carlos;	//getTotalTuplas.
-	//Cristobook.TotalTuplas++;
+int main(){	
 	
-	//InsertarTabla
-	//Paso &Carlos y Cristobok.PunteroAPuntero = Usuario &u;
-	//Llamar Resize aumentar.
-
-	
-		
-	//UsuariosPredefinidos();
-	//MenuInicio(); 
+	MenuInicio(); 
 }
