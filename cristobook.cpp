@@ -507,23 +507,7 @@ int getTotalFotosUsuario(Usuario *u){
 int getTotalTuplas(TablaUsuarios &tu){
 	return tu.TotalTuplas;
 }
-/**
- * @brief En éste módulo insertaremos los usuarios predefinidos en una TablaUsuarios que hemos creado previamente.
- * @param Usuario *u
- * @param TablaUsuarios &tu
- * @pre Deberemos haber creado la tabla de usuarios previamente.
- * @post Insertaremos en la tabla de usuarios los usuarios que querámos.
- * @version 1.0
- * @author Carlos Fdez.
- */
-void insertarUsuarioTablaUsuarios(Usuario *u, TablaUsuarios tu){
-
-	if (getTotalTuplas(tu) <= 20){
-		tu.punteroapuntero[getTotalTuplas(tu)] = u;
-	}else
-		cout <<  "No hay espacio para insertar más usuarios. " << endl;
-	
-}
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /**
  * @brief Cambia la dimensión del vector a una nueva DIM_nueva
 	 *  1) Creo un vector nuevo con la nueva dimension +1
@@ -537,7 +521,7 @@ void insertarUsuarioTablaUsuarios(Usuario *u, TablaUsuarios tu){
  * @version 1.0
  * @author Carlos Fdez.
  */
-Usuario** resizeAumentarPorPunteros(Usuario **v, int TotalTuplas){
+Usuario** resizeAumentarPorPunteros(Usuario **v, int &TotalTuplas){
 	
 	int DIM = TotalTuplas+1;
 
@@ -549,22 +533,17 @@ Usuario** resizeAumentarPorPunteros(Usuario **v, int TotalTuplas){
 		cerr << "Error. No hay memoria suficiente. Se abortará la ejecución" << endl;
 		exit(-1);
 	}
-	for(int i = 0;i < TotalTuplas;i++)
+	for(int i = 0;i < TotalTuplas;i++){
 		vectorNuevo[i]=v[i];
-
-	v = vectorNuevo;
-	delete [] vectorNuevo;
-	vectorNuevo = 0;
+	}
+	
+	delete [] v;
 	TotalTuplas = DIM;
 
-	return v;
+	return vectorNuevo;
 }
 /**
  * @brief Cambia la dimensión del vector a una nueva DIM_nueva
-
-	 
-	 *  3) Libero la memoria del vector que me pasan
-	 *  4) Devuelvo el puntero del nuevo vector
  * @param Persona *v
  * @param int util_v
  * @param int DIM_actual(E/S)
@@ -587,52 +566,52 @@ TablaUsuarios* resizeAumentar(TablaUsuarios *tu, int util_actual, int &DIM_actua
 	}	
 	for(int i = 0;i < util_actual;i++)
 		vector_Nuevo[i]=tu[i];
-
+	//3) Libero la memoria del vector que me pasan
 	delete [] tu;
 	tu = 0;
 
 	DIM_actual = DIM_nueva;
-
+	
+	//4) Devuelvo el puntero del nuevo vector
 	return vector_Nuevo;
 }
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /**
- * @brief Cambia la dimensión del vector a una nueva dim_nueva decreciente
-	 *  1) Creo un vector nuevo con la nueva dimension -1
-	 *  2) Copio el contenido del vector que me pasan, en el nuevo vector (SIEMPRE QUEDARA 1 MÁS CHICO)
-	 *  3) Libero la memoria del vector que me pasan
-	 *  4) Devuelvo el puntero del nuevo vector
- * @param TablaUsuarios *tu
- * @param int util_actual
- * @param int DIM_actual
- * @post Disminuiremos en uno la dimensión de nuestro vector.
+ * @brief En éste módulo insertaremos los usuarios predefinidos en una TablaUsuarios que hemos creado previamente.
+ * @param Usuario *u
+ * @param TablaUsuarios &tu
+ * @pre Deberemos haber creado la tabla de usuarios previamente.
+ * @post Insertaremos en la tabla de usuarios los usuarios que querámos.
  * @version 1.0
  * @author Carlos Fdez.
  */
-void resizeDis(TablaUsuarios *tu, int util_actual, int &DIM_actual){
+void insertarUsuarioTablaUsuarios(Usuario *u, TablaUsuarios &tu){
 
-	int DIM_nueva = DIM_actual-1;
+	//RESIZE
+	tu.punteroapuntero=resizeAumentarPorPunteros(tu.punteroapuntero,tu.TotalTuplas);
+	
+	//INSERTAR USUARIO EN EL VECTOR
+	tu.punteroapuntero[tu.TotalTuplas] = u;
+	//tu.TotalTuplas++;
 
-	TablaUsuarios *vector_Nuevo = 0;
-	
-	vector_Nuevo = new TablaUsuarios[DIM_nueva]; //memoria dinámica: ME HE CREADO "tamanio" PERSONAS DINÁMICAS
-	if (vector_Nuevo == 0){
-		cerr << "Error. No hay memoria suficiente. Se abortará la ejecución" << endl;
-		exit(-1);
-	}
-	
-	if(DIM_nueva != 0){	
-		for(int i = 0;i < 1;i++){
-			cout << "El valor de la útil es: " << util_actual << ", la dimensión nueva es: " << DIM_nueva << endl;
-			vector_Nuevo[i]=tu[i];
-		}
-	}
-
-	tu = vector_Nuevo;
-	vector_Nuevo = 0;
-	delete [] vector_Nuevo;
-	
-	DIM_actual = DIM_nueva;
 }
+void eliminarUsuarioTablaUsuarios(Usuario *u, TablaUsuarios &tu){
+	//eliminar usuario
+	borrarUsuario(u);
+	//RESIZE
+	tu.punteroapuntero = resizeAumentarPorPunteros(tu.punteroapuntero,tu.TotalTuplas);
+	//Eliminar USUARIO EN EL VECTOR
+
+}
+/*void insertarFoto(Foto* f, int &totalFotosUsuario, int &DIM_vfotos,Usuario *u){ 	
+	//aquí dentro se usa la llamada al resize!!!
+	u->v_fotos = resizeAumentar(u->v_fotos,tu.totalFotosUsuario,tu.DIM_vfotos);
+	u->v_fotos[totalFotosUsuario] = *f;
+	setRuta(f,f->ruta);
+	setTipo(f,f->Tipo);
+	setTamanio(f, f->Tamanio);
+	tu.totalFotosUsuario++;
+}*/
 /**
  * @brief Este módulo se encargade comprobar si el Login ya está introducido o no.
  * @param string login
@@ -690,21 +669,22 @@ void insertarUsuarioNuevo(TablaUsuarios &tu){
 	bool usado = false;	
 	
 	cout << "Introduce su Login : " << endl;
-	cin>>login;
+	cin >> login;
 	
-	for(int i = 0;i < tu.TotalTuplas;i++)
+	for(int i = 0;i < tu.TotalTuplas;i++){
 		comprobacionLogin(login,tu.punteroapuntero[i],usado);	
-	
+	}
 	if(usado != true){
-	
+		
+		//Reservamos el espacio de memmoria al nuevo Usuario.
 		Usuario *u = 0;	
 		u = crearUsuario();
-		
+	
 		setLogin(u,login);
 		pedirDatosUsuario(u);
-		tu.TotalTuplas++;
 		//tu.punteroapuntero = resizeAumentarPorPunteros(tu.punteroapuntero,tu.TotalTuplas);
 		insertarUsuarioTablaUsuarios(u,tu);
+		tu.punteroapuntero = resizeAumentarPorPunteros(tu.punteroapuntero,tu.TotalTuplas);
 	}
 }
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -798,7 +778,7 @@ void UsuariosPredefinidos(TablaUsuarios &tu){
 	setPerfilUsuario(Carlos, "FIFA");
 	//setRuta(f->ruta, "/home/Carlos/Escritorio/Imagenes/foto1.jpg");
 	insertarUsuarioTablaUsuarios(Carlos,tu);
-	setTotalTuplas(tu,getTotalTuplas(tu));
+	//setTotalTuplas(tu,getTotalTuplas(tu));
 	
 	/***************************************
 	**************	JAIME	****************
@@ -809,7 +789,7 @@ void UsuariosPredefinidos(TablaUsuarios &tu){
 	setApellido(Jaime, "Cabezas");
 	setPerfilUsuario(Jaime, "Minecraft");
 	insertarUsuarioTablaUsuarios(Jaime,tu);
-	setTotalTuplas(tu,getTotalTuplas(tu)+1);
+	//setTotalTuplas(tu,getTotalTuplas(tu)+1);
 	
 	/***************************************
 	********	CRISTIAN	********
@@ -820,7 +800,7 @@ void UsuariosPredefinidos(TablaUsuarios &tu){
 	setApellido(Cristian, "Campos");
 	setPerfilUsuario(Cristian, "Footbal Manager");
 	insertarUsuarioTablaUsuarios(Cristian,tu);
-	setTotalTuplas(tu,getTotalTuplas(tu)+1);
+	//setTotalTuplas(tu,getTotalTuplas(tu)+1);
 	
 	/***************************************
 	**************	ADRIAN	****************
@@ -831,7 +811,7 @@ void UsuariosPredefinidos(TablaUsuarios &tu){
 	setApellido(Adrian, "Castillo");
 	setPerfilUsuario(Adrian, "Counter Strike");
 	insertarUsuarioTablaUsuarios(Adrian,tu);
-	setTotalTuplas(tu,getTotalTuplas(tu)+1);
+	//setTotalTuplas(tu,getTotalTuplas(tu)+1);
 	
 	/***************************************
 	**************	JESUS	****************
@@ -842,7 +822,7 @@ void UsuariosPredefinidos(TablaUsuarios &tu){
 	setApellido(Jesus, "Rey");
 	setPerfilUsuario(Jesus, "GTA V");
 	insertarUsuarioTablaUsuarios(Jesus,tu);
-	setTotalTuplas(tu,getTotalTuplas(tu)+1);
+	//setTotalTuplas(tu,getTotalTuplas(tu)+1);
 	
 	/***************************************
 	**************	PABLO	****************
@@ -853,7 +833,7 @@ void UsuariosPredefinidos(TablaUsuarios &tu){
 	setApellido(Pablo, "García");
 	setPerfilUsuario(Pablo, "Counter Strike");
 	insertarUsuarioTablaUsuarios(Pablo,tu);
-	setTotalTuplas(tu,getTotalTuplas(tu)+1);
+	//setTotalTuplas(tu,getTotalTuplas(tu)+1);
 	
 	/***************************************
 	**************	  ANA	****************
@@ -864,7 +844,7 @@ void UsuariosPredefinidos(TablaUsuarios &tu){
 	setApellido(Ana, "Tallón");
 	setPerfilUsuario(Ana, "Animal Crossing");
 	insertarUsuarioTablaUsuarios(Ana,tu);
-	setTotalTuplas(tu,getTotalTuplas(tu)+1);
+	//setTotalTuplas(tu,getTotalTuplas(tu)+1);
 	
 }
 /**
