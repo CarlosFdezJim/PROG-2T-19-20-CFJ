@@ -254,9 +254,13 @@ TablaUsuarios crearTablaUsuarios(){
  */
 void borrarTablaUsuarios(TablaUsuarios tu, Usuario *u, Foto *f){
 	
-	//Eliminamos los datos de Foto y todo el contenido de sus punteros.
-	borrarFoto(f);
+	//int DIM = totalFotosUsuario;
 	
+	
+	//Eliminamos los datos de Foto y todo el contenido de sus punteros.
+	//for(int i=0; 0 < getTotalFotosUsuario; i++){
+				borrarFoto(f);
+	//}
 	//Eliminamos los datos del Usuario.(Dentro eliminamos el vector de fotos y los puntero).
 	borrarUsuario(u);
 	
@@ -591,17 +595,7 @@ void insertarUsuarioTablaUsuarios(Usuario *u, TablaUsuarios &tu){
 	tu.punteroapuntero=resizeAumentarPorPunteros(tu.punteroapuntero,tu.TotalTuplas);
 	
 	//INSERTAR USUARIO EN EL VECTOR
-	tu.punteroapuntero[tu.TotalTuplas] = u;
-	//tu.TotalTuplas++;
-
-}
-void eliminarUsuarioTablaUsuarios(Usuario *u, TablaUsuarios &tu){
-	//eliminar usuario
-	borrarUsuario(u);
-	//RESIZE
-	tu.punteroapuntero = resizeAumentarPorPunteros(tu.punteroapuntero,tu.TotalTuplas);
-	//Eliminar USUARIO EN EL VECTOR
-
+	tu.punteroapuntero[tu.TotalTuplas-1] = u;
 }
 /*void insertarFoto(Foto* f, int &totalFotosUsuario, int &DIM_vfotos,Usuario *u){ 	
 	//aquí dentro se usa la llamada al resize!!!
@@ -681,11 +675,47 @@ void insertarUsuarioNuevo(TablaUsuarios &tu){
 		u = crearUsuario();
 	
 		setLogin(u,login);
-		pedirDatosUsuario(u);
-		//tu.punteroapuntero = resizeAumentarPorPunteros(tu.punteroapuntero,tu.TotalTuplas);
+		string nombre = "";
+		string apellido = "";
+		string perfilUsuario = "";
+	
+		cout << YELLOW << "Dime el nombre: " << DEFAULT << endl;
+		cin >> nombre;
+		cout << YELLOW << "Apellido: " << DEFAULT << endl;
+		cin >> apellido;
+		cout << YELLOW << "Perfil de usuarios: " << DEFAULT  << endl;
+		cin >> perfilUsuario;
+	
+		setNombre(u,nombre);
+		setApellido(u,apellido);
+		setPerfilUsuario(u,perfilUsuario);
+		//pedirDatosUsuario(u);
 		insertarUsuarioTablaUsuarios(u,tu);
 		tu.punteroapuntero = resizeAumentarPorPunteros(tu.punteroapuntero,tu.TotalTuplas);
+
 	}
+}
+/**
+ * @brief Este módulo se va a encargar de borrar el usuario seleccionado de la tabla.
+ * @param 
+ * @param 
+ * @pre La tabla de usuarios deberá estar creada.
+ * @post Se elimnará el usuario selecionado.
+ * @version 1.0
+ * @author Carlos Fdez.
+ */
+void eliminarUsuarioTablaUsuarios(Usuario *u, TablaUsuarios &tu){
+	
+	string login = "";
+
+	cout << " Selecione el usuario que desea eliminar, recuerde que tiene que introducir el login" << endl;
+	cin >> login;
+	//eliminar usuario
+	borrarUsuario(u);
+	//RESIZE
+	tu.punteroapuntero = resizeAumentarPorPunteros(tu.punteroapuntero,tu.TotalTuplas);
+	//Eliminar USUARIO EN EL VECTOR
+
 }
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -759,6 +789,8 @@ void printTablaUsuarios(TablaUsuarios &tu){
  */
 void UsuariosPredefinidos(TablaUsuarios &tu){
 
+	Foto *f=0;
+
 	//Usuarios predefinidos.
 	Usuario *Carlos=0;
 	Usuario *Jaime=0;
@@ -776,10 +808,14 @@ void UsuariosPredefinidos(TablaUsuarios &tu){
 	setNombre(Carlos, "Carlos");
 	setApellido(Carlos, "Fernández");
 	setPerfilUsuario(Carlos, "FIFA");
-	//setRuta(f->ruta, "/home/Carlos/Escritorio/Imagenes/foto1.jpg");
+	f=crearFoto();
+	setRuta(f, "/home/Carlos/Escritorio/Imagenes/foto1.jpg");
+	setTipo(f,"jpg");
+	setTamanio(f,1024);
 	insertarUsuarioTablaUsuarios(Carlos,tu);
-	//setTotalTuplas(tu,getTotalTuplas(tu));
-	
+	cout << "DEBUG: Las útiles valen: " << tu.TotalTuplas << endl;
+
+			
 	/***************************************
 	**************	JAIME	****************
 	****************************************/	
@@ -789,7 +825,7 @@ void UsuariosPredefinidos(TablaUsuarios &tu){
 	setApellido(Jaime, "Cabezas");
 	setPerfilUsuario(Jaime, "Minecraft");
 	insertarUsuarioTablaUsuarios(Jaime,tu);
-	//setTotalTuplas(tu,getTotalTuplas(tu)+1);
+	cout << "DEBUG: Las útiles valen: " << tu.TotalTuplas << endl;
 	
 	/***************************************
 	********	CRISTIAN	********
@@ -800,7 +836,7 @@ void UsuariosPredefinidos(TablaUsuarios &tu){
 	setApellido(Cristian, "Campos");
 	setPerfilUsuario(Cristian, "Footbal Manager");
 	insertarUsuarioTablaUsuarios(Cristian,tu);
-	//setTotalTuplas(tu,getTotalTuplas(tu)+1);
+	cout << "DEBUG: Las útiles valen: " << tu.TotalTuplas << endl;
 	
 	/***************************************
 	**************	ADRIAN	****************
@@ -811,7 +847,7 @@ void UsuariosPredefinidos(TablaUsuarios &tu){
 	setApellido(Adrian, "Castillo");
 	setPerfilUsuario(Adrian, "Counter Strike");
 	insertarUsuarioTablaUsuarios(Adrian,tu);
-	//setTotalTuplas(tu,getTotalTuplas(tu)+1);
+	cout << "DEBUG: Las útiles valen: " << tu.TotalTuplas << endl;
 	
 	/***************************************
 	**************	JESUS	****************
@@ -822,7 +858,7 @@ void UsuariosPredefinidos(TablaUsuarios &tu){
 	setApellido(Jesus, "Rey");
 	setPerfilUsuario(Jesus, "GTA V");
 	insertarUsuarioTablaUsuarios(Jesus,tu);
-	//setTotalTuplas(tu,getTotalTuplas(tu)+1);
+	cout << "DEBUG: Las útiles valen: " << tu.TotalTuplas << endl;
 	
 	/***************************************
 	**************	PABLO	****************
@@ -833,7 +869,7 @@ void UsuariosPredefinidos(TablaUsuarios &tu){
 	setApellido(Pablo, "García");
 	setPerfilUsuario(Pablo, "Counter Strike");
 	insertarUsuarioTablaUsuarios(Pablo,tu);
-	//setTotalTuplas(tu,getTotalTuplas(tu)+1);
+	cout << "DEBUG: Las útiles valen: " << tu.TotalTuplas << endl;
 	
 	/***************************************
 	**************	  ANA	****************
@@ -844,7 +880,7 @@ void UsuariosPredefinidos(TablaUsuarios &tu){
 	setApellido(Ana, "Tallón");
 	setPerfilUsuario(Ana, "Animal Crossing");
 	insertarUsuarioTablaUsuarios(Ana,tu);
-	//setTotalTuplas(tu,getTotalTuplas(tu)+1);
+	cout << "DEBUG: Las útiles valen: " << tu.TotalTuplas << endl;
 	
 }
 /**
@@ -914,7 +950,7 @@ void MenuInicio(TablaUsuarios tu, Usuario *u, Foto *f){
 						borrarTablaUsuarios(tu, u, f);
 						cout << RED << "La tabla de usuarios se eliminó correctamente." << DEFAULT << endl;
 					}else{
-						cout << ERROR << "\nRecuerde que si no CREA una tabla de Usuarios no podrá seguir utilizando Cristobook. " << DEFAULT << endl;
+						cout << ERROR << "Recuerde que si no CREA una tabla de Usuarios no podrá seguir utilizando Cristobook. " << DEFAULT << endl;
 						}
 				break;
 				
@@ -939,6 +975,7 @@ void MenuInicio(TablaUsuarios tu, Usuario *u, Foto *f){
 				case 5:		
 					if(tabla==true){
 						cout << GREEN << "\n****** PREPARANDO PARA ELIMINAR USUARIO ********" << DEFAULT << endl;
+						eliminarUsuarioTablaUsuarios(u,tu);
 					}else{
 						cout << ERROR << "No podrá usar esta opción hasta que la Tabla de Usuarios no esté creada." << DEFAULT << endl;	
 					}
