@@ -602,8 +602,15 @@ void resizeAumentarFoto(Usuario *u,Foto *v_fotos){
 	u->v_fotos = vectorNuevo;
 	delete [] v_fotos;
 	
-	
 }
+/**
+ * @brief Este módulo se encarga de disminuir en uno la dimensión y las útiles de nuestro vector cuando lo llamemos.
+ * @param Foto v_fotos
+ * @param int totalFotosUsuario
+ * @post La dimensión del vector decrecerá en una posición.
+ * @version 1.0
+ * @author Carlos Fdez.
+ */
 void resizeDisFoto(Usuario *u,Foto *v_fotos){
 	
 	int DIM = u->totalFotosUsuario-1;
@@ -643,6 +650,7 @@ void printFoto(Foto *f){
 	cout << BLUE << "Ruta : " << DEFAULT << getRuta(f) << "." << getTipo(f) << endl;
 	cout << BLUE << "Tipo : " << DEFAULT << getTipo(f)  << endl;
 	cout << BLUE << "Tamaño : " << DEFAULT << getTamanio(f) << " bytes." << DEFAULT << endl;
+	cout << PURPLE << "----------------" << DEFAULT << endl;
 	
 }
 /**
@@ -665,7 +673,7 @@ void printUsuario(Usuario *u){
 	
 	//Imprimimos el vector de fotos 
 	if(getTotalFotosUsuario(u) != 0){
-		cout << YELLOW << "----------------" << DEFAULT << endl;
+		cout << PURPLE << "----------------" << DEFAULT << endl;
 		for(int i= 0; i < getTotalFotosUsuario(u);i++){
 			cout << BLUE << "Foto número : " << DEFAULT << i << endl;
 			printFoto(&u->v_fotos[i]);
@@ -735,16 +743,25 @@ void insertarUsuarioTablaUsuarios(Usuario *u, TablaUsuarios &tu){
  */
 void ValoresFoto(Foto *f){
 
-	cout << YELLOW << "* * * * * * * * * * * * * * * * * * * " << DEFAULT << endl;
-	cout << "Por favor ingresa la ruta de la foto. " << endl;
+	cout << BLUE << "* * * * * * * * * * * * * * * * * * * " << DEFAULT << endl;
+	cout << YELLOW << "Por favor ingresa la ruta de la foto. " << DEFAULT << endl;
 	cin >> f->ruta;
-	cout << "Por favor ingresa el formato de la foto. " << endl;
+	
+	cout << YELLOW << "Por favor ingresa el formato de la foto. " << DEFAULT << endl;
+	cout << YELLOW << "Le indico los tipos compatibles [bmp] [jpeg] [png] [gif] " << DEFAULT << endl ;
 	cin >> f->tipo;
-	cout << YELLOW << "* * * * * * * * * * * * * * * * * * * " << DEFAULT << endl;
-	if(f->tipo == "png")
-		setTamanio(f,124323423);
-	else
-		setTamanio(f,33333);
+	cout << BLUE << "* * * * * * * * * * * * * * * * * * * " << DEFAULT << endl;
+	
+	if(f->tipo == "bmp"){
+		setTamanio(f,125910);
+	}else if(f->tipo == "jpeg"){
+		setTamanio(f,49350);
+	}else if(f->tipo == "png"){
+		setTamanio(f,8710);
+	}else if(f->tipo == "gif"){
+		setTamanio(f,6050);
+	}else 
+		setTamanio(f,405000);
 }
 /**
  * @brief Módulo que me muestra cuantas fotos tengo en el vector de fotografias.
@@ -757,9 +774,10 @@ void ValoresFoto(Foto *f){
 void printVectorFotos(Foto *v_fotos, Usuario *u ){
 
 		if(getTotalFotosUsuario(u) != 0){
-			for(int i=0; i < getTotalFotosUsuario(u); i++)
-			printFoto(&v_fotos[i]);
-			cout << YELLOW << "----------------" << DEFAULT << endl;
+			for(int i=0; i < getTotalFotosUsuario(u); i++){
+				printFoto(&v_fotos[i]);
+				cout << PURPLE << "----------------" << DEFAULT << endl;
+			}
 		}else
 			cerr << RED << "Lo sentimos, no hay fotos insertadas." << DEFAULT << endl;
 }
@@ -796,6 +814,7 @@ void insertarFoto(TablaUsuarios &tu){
 		f=crearFoto();
 		Usuario *u = 0;
 		u = crearUsuario();
+		
 		u = tu.punteroapuntero[posicion];
 		ValoresFoto(f);
 		resizeAumentarFoto(u,u->v_fotos);
@@ -819,7 +838,7 @@ void insertarFotoUsuario(Usuario *u, Foto *f){
 
 	resizeAumentarFoto(u,u->v_fotos);
 	u->v_fotos[getTotalFotosUsuario(u)] = *f;
-	setTotalFotosUsuario(u,u->totalFotosUsuario+1);
+	setTotalFotosUsuario(u,getTotalFotosUsuario(u)+1);
 }
 /**
  * @brief Módulo que se encarga de pedir ciiertos datos al usuario. 
@@ -905,24 +924,24 @@ void eliminarUsuarioTablaUsuarios(TablaUsuarios &tu){
 			cont++;	
 		}
 	}
-	/*int a = 4;
-	int b = 6;
-	int c=0;
-	c=a;
-	a=b;
-	b=c;*/
+	
 	if(usado == true){
+	
 		//Creamos un Usuario aux para hacer el intercambio.
 		Usuario* aux=0;
 		aux=crearUsuario();
+		
 		//Realizamos el intercambio de posiciones.
 		aux = tu.punteroapuntero[posicion];
 		tu.punteroapuntero[posicion]=tu.punteroapuntero[tu.TotalTuplas-1];
 		tu.punteroapuntero[tu.TotalTuplas-1]= aux;
+		
 		//Borramos usuario en la última posición
 		borrarUsuario(tu.punteroapuntero[tu.TotalTuplas-1]);
+		
 		//Disminuimos el tamaño del vector.
 		tu.punteroapuntero = resizeDisminuirPorPunteros(tu,tu.punteroapuntero);
+		
 		//Imprimimos el vector de usuario para que el administrador vea que se ha borrado correctamente.
 		printTablaUsuarios(tu);
 	}else{
@@ -931,7 +950,6 @@ void eliminarUsuarioTablaUsuarios(TablaUsuarios &tu){
 }
 /**
  * @brief Módulo que se encarga de buscar usuario por Login
- * @param Usuario *u
  * @param TablaUsuario tu
  * @pre Los usuarios deben de estar introducidos correctamente en el vector.
  * @post Nos dirá en que posición se encuentra el usuario.
@@ -958,10 +976,62 @@ void BuscarLogin(TablaUsuarios tu){
 			cont++;	
 		}
 	}
-	//Mostramos la posición dónde está el usuario.
-	cout << BLUE << "El usuario se encuentra en la posición: " << DEFAULT << posicion << endl;
-	printUsuario(tu.punteroapuntero[posicion]);
+	if(usado == true){
+		//Mostramos la posición dónde está el usuario.
+		cout << BLUE << "El usuario se encuentra en la posición: " << DEFAULT << posicion << endl;
+		printUsuario(tu.punteroapuntero[posicion]);
+	}else{
+		cout << ERROR << "El Login que usted ha elegido no se encuentra en nuestra tabla de usuarios. " << DEFAULT << endl;
+	}
 }
+/**
+ * @brief Módulo que se encarga de borrar la foto del usuario y ordenar el vector de fotos
+ * @param TablaUsuarios tu
+ * @pre El usuario debe de tener al menos una foto introducida.
+ * @post Al usuario seleccionado se le eliminará la foto de su vector de fotos.
+ * @version 1.0
+ * @author Carlos Fdez.
+ */
+void eliminarFotoUsuario(TablaUsuarios &tu){
+
+	//Declaración de variables locales.
+	string login = "";
+	bool usado = false;
+	unsigned int posicion=0;
+	int cont=0;
+	
+	
+	cout << "Introduce el Login del usuario al que quieres elimnar una fotografía : " << endl;
+	cin >> login;
+	
+	//Comprobamos si el login existe o no.
+	for(int i = 0;i < tu.TotalTuplas;i++){
+		comprobacionLogin(login,tu.punteroapuntero[i],usado);
+		if(usado == true && cont != 1){
+			posicion=i;
+			cont++;	
+		}
+	}
+	cout << ERROR << "DEBUG: La posicion es: " << posicion << DEFAULT << endl;
+	if(usado == true){
+		Foto *f=0;
+		f=crearFoto();
+		Usuario *u = 0;
+		u = crearUsuario();
+		
+		u = tu.punteroapuntero[posicion];
+
+		//ValoresFoto(f);
+		resizeDisFoto(u,u->v_fotos);
+		setTotalFotosUsuario(u,getTotalFotosUsuario(u)+1);
+		u->v_fotos[getTotalFotosUsuario(u)-1] = *f;
+		//setTotalFotosUsuario(u,getTotalFotosUsuario(u)+1);
+		//printVectorFotos(u->v_fotos, u );
+	}else
+		cerr << RED << "Lo sentimos, el Login introducido no está en nuestra base de datos." << DEFAULT << endl;
+
+}
+
 /**
  * @brief Módulo que se encarga de ordenar el vector por Login
  * @param TablaUsuarios tu
@@ -1037,29 +1107,6 @@ void OrdenarTablaUsuarios(TablaUsuarios &tu){
 	cout << "Seleccione el criterio por el que quiere ordenar: " << endl;
 	cin >> opcion;
 	
-/*	while(opcion!=2){
-		cout << "\nEliga usted el programa que desea ejecutar: " << endl;		
-		cin >> opcion;
-	
-			switch (opcion){
-		
-				case 1:
-					cout  << " ****    ORDENANDO TABLA DE USUARIOS POR LOGIN    **** " << endl;
-					ordenamosLogin(tu);
-					cout << GREEN << "La TablaUsuarios se ha ordenado correctamente." << DEFAULT << endl;
-				break;
-
-				case 2:
-					cout  << " ****    ORDENANDO TABLA DE USUARIOS POR TOTAL FOTOS USUARIO    **** " << endl;
-					ordenamosTotalFotosUsuario(tu);
-					cout << GREEN << "La TablaUsuarios se ha ordenado correctamente." << DEFAULT << endl;
-				break;
-				
-				default:
-					cout << YELLOW << "\nLo siento, la opción seleccionada no ha sido añadida todavía. " << DEFAULT << endl;
-			}
-	}
-}	*/	
 	if(opcion == 1){
 		cout  << " ****    ORDENANDO TABLA DE USUARIOS POR LOGIN    **** " << endl;
 		ordenamosLogin(tu);
@@ -1122,12 +1169,10 @@ void UsuariosPredefinidos(TablaUsuarios &tu){
 	setPerfilUsuario(Carlos, "FIFA");
 	insertarUsuarioTablaUsuarios(Carlos,tu);
 	//Foto1
-	cout << "LLEga" << endl; 
 	setRuta(f, "/home/Carlos/Escritorio/Imagenes/foto0");
 	setTipo(f,"jpg");
 	setTamanio(f,1024);
 	insertarFotoUsuario(Carlos, f);
-	cout << "LLEga" << endl; 
 	//Foto2
 	setRuta(f, "/home/Carlos/Escritorio/Imagenes/foto1");
 	setTipo(f,"jpg");
@@ -1391,6 +1436,7 @@ void MenuInicio(TablaUsuarios tu){
 				
 				case 8:		
 					if(tabla==true){
+						cout << PURPLE << "\n****** PREPARANDO PARA INSERTAR FOTO ********" << DEFAULT << endl;
 						insertarFoto(tu);
 					}else{
 						cout << ERROR << "No podrá usar esta opción hasta que la Tabla de Usuarios no esté creada." << DEFAULT << endl;	
@@ -1399,7 +1445,8 @@ void MenuInicio(TablaUsuarios tu){
 				
 				case 9:	
 					if(tabla==true){
-						//Eliminar fotografía Usuario
+						cout << PURPLE << "\n****** PREPARANDO PARA ELIMINAR FOTO ********" << DEFAULT << endl;
+						eliminarFotoUsuario(tu);
 					}else{
 						cout << ERROR << "No podrá usar esta opción hasta que la Tabla de Usuarios no esté creada." << DEFAULT << endl;	
 					}
@@ -1407,6 +1454,7 @@ void MenuInicio(TablaUsuarios tu){
 				
 				case 10:		
 					if(tabla==true){
+						cout << PURPLE << "\n****** IMPRIMIENDO VECTOR DE FOTOGRAFIAS ********" << DEFAULT << endl;
 						//Imprimir fotografias del usuario
 						printVectorFotos(u->v_fotos, u);
 						
