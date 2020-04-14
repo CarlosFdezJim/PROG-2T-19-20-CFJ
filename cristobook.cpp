@@ -2,6 +2,7 @@
 //	CRISTOBOOK.cpp
 //
 //  Created by Carlos Fdez
+//  https://github.com/CarlosFdezJim/PROG-2T-CFJ
 //
 //
 
@@ -797,13 +798,16 @@ void printFotosUsuario(TablaUsuarios &tu){
 		comprobacionLogin(login,tu.punteroapuntero[i],usado);
 		if(usado == true && cont != 1){
 			posicion=i;
-			cont++;	
+			cont++;
+			cout << "Posición: " << posicion << endl;	
 		}
 	}
 
 	//Si existe el login
 	if(usado == true){
+		//cout << "DEBUG: Posición: " << posicion << endl;
 		printVectorFotos(tu.punteroapuntero[posicion]->v_fotos, tu.punteroapuntero[posicion]);
+		
 	}else
 		cerr << RED << "Lo sentimos, el Login introducido no está en nuestra base de datos." << DEFAULT << endl;
 }
@@ -918,6 +922,41 @@ void ValoresFoto(Foto *f){
 	}else 
 		setTamanio(f,405000);
 }
+/**
+ * @brief Este módulo busca dentro de nuestra tabla de Usuarios y sus miembros el dato introducido por el usuario.
+ * @param TablaUsuarios tu
+ * @pre Los usuarios y fotos deben de estar bien insertados
+ * @post Mostraremos por pantalla la cadena insertada por el Usuario si se encuentra
+ * @version 1.0
+ * @author Carlos Fdez.
+ */
+/*void extra(TablaUsuarios tu){
+
+	string cadena="";
+	string v[50];
+	int util_v=0;
+	Usuario *u = 0;
+	string x="";
+
+	//Pedimos al usuario los datos que quiera buscar.
+	cout << "Introduce los datos que quieres buscar: " << endl;
+	cin >> cadena;
+	
+	//Buscamos con Find el valor dentro del vector de punteros.
+	for(int i=0; i < getTotalFotosUsuario(u);i++){
+		tu.punteroapuntero[i];
+		//Buscamos el valor dentro del vector de fotos.
+		for(int j=0; j < u->v_fotos; j++){
+			x=TotalFotosUsuario[j].find(cadena);
+		}
+	}
+	
+		//Si el resultado es -1 entra en el bucle.
+			if(x != -1)
+			//Copiamos el resultado en un vector
+			
+
+}*/
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /**
  * @brief En éste módulo insertaremos los usuarios predefinidos en una TablaUsuarios que hemos creado previamente.
