@@ -149,6 +149,7 @@ void Salir(TablaUsuarios &tu);
 void UsuariosPredefinidos(TablaUsuarios &tu);
 void MostrarMenu();
 void MenuInicio(TablaUsuarios &tu);
+void eliminarUsuariosporMinFoto(TablaUsuarios &tu, int Fotos_min);
 
 //********************************************************************************************************//
 
@@ -1302,6 +1303,65 @@ void Debug(TablaUsuarios tu){
 		printUsuario(tu.punteroapuntero[i]);
 
 }
+/**
+ * @brief Módulo que eliminará a los usuario de la TablaUsuarios que como tenga menos de 3 fotos.
+ * @param TablaUsuarios tu (E/S).
+ * @param int Foto_min.
+ * @pre La TablaUsuarios debe de haber sido creada con anterioridad.
+ * @pre Los usuarios se deben de haber creado antes.
+ * @post Se eliminarán los usuarios que tengan menos de tres fotografías.
+ */
+void eliminarUsuariosporMinFoto(TablaUsuarios &tu, int Fotos_min){
+
+	int posicion=0;
+
+	//Imprimimos los usuarios predefinidos.
+	printTablaUsuarios(tu);
+
+	/*int Fotos_min=0;
+	cout << "Por favor introduce el número de fotos que tiene que tener un usuario para borrarlo." << endl;
+	cin >> Fotos_min;*/
+
+	//Recorre el bucle tantas veces como usuarios hayan sido almacenados
+	for(int i = 0;i < getTotalTuplas(tu);i++){
+		posicion++;
+		cout << RED << "DEBUG1: TT " << getTotalTuplas(tu) << endl;
+		//Comprobamos si el usuario tiene menos de tres fotos, de ser así se elimina el usuario.
+
+		if(getTotalFotosUsuario(tu.punteroapuntero[i]) < Fotos_min){
+			//Eliminamos el usuario de la Tabla.
+			for(int j=0; j < getTotalTuplas(tu); j++){
+					//borrarUsuario(tu.punteroapuntero[j]);
+			}
+				cout << RED << "DEBUG2: TT " << getTotalTuplas(tu) << endl;
+
+				Usuario* aux=0;
+				aux=crearUsuario();
+
+				//Realizamos el intercambio de posiciones.
+				aux = tu.punteroapuntero[i];
+				tu.punteroapuntero[i]=tu.punteroapuntero[tu.TotalTuplas-1];
+				tu.punteroapuntero[tu.TotalTuplas-1]= aux;
+		
+				//Borramos usuario en la última posición
+				borrarUsuario(tu.punteroapuntero[tu.TotalTuplas-1]);
+		
+				//Disminuimos el tamaño del vector.
+				tu.punteroapuntero = resizeDisminuirPorPunteros(tu,tu.punteroapuntero);
+			
+		
+		}else{
+			cout << "El usuario no tiene menos de " << Fotos_min << "fotos." << endl;
+		}
+	}
+
+
+	if(getTotalTuplas(tu) != 0){
+		printTablaUsuarios(tu);
+	}else{
+		cout << "No hay más usuarios en la tabla." << endl;
+	}
+}
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /**
  * @brief Módulo que se encarga de almacenar en la Tabla de Usuarios algunos usuarios predefinidos.
@@ -1497,7 +1557,8 @@ void MostrarMenu(){
 		cout << "\n[8]  Añadir Fotografía a Usuario. ";
 		cout << "\n[9]  Eliminar Fotografía de un Usuario. ";
 		cout << "\n[10] Imprimir las Fotografías de un Usuario. ";
-		cout << "\n[11] Salir. " << DEFAULT << endl;
+		cout << "\n[11] Prueba de aptitud. ";
+		cout << "\n[12] Salir. " << DEFAULT << endl;
 
 }
 /**
@@ -1516,6 +1577,7 @@ void MenuInicio(TablaUsuarios &tu){
 	int opcion=0;
 	bool tabla=false;
 
+
 	
 	Usuario *u = 0;
 	u = crearUsuario();
@@ -1523,7 +1585,7 @@ void MenuInicio(TablaUsuarios &tu){
 	f = crearFoto();
 	
 	//Filtro para que el usuario no se salga de las opciones.
-	while(opcion!=11){
+	while(opcion!=12){
 		//Mostramos menú anteriormente realizado.
 		MostrarMenu();
 		
@@ -1633,8 +1695,18 @@ void MenuInicio(TablaUsuarios &tu){
 						cout << ERROR << "No podrá usar esta opción hasta que la Tabla de Usuarios no esté creada." << DEFAULT << endl;	
 					}
 				break;
+
+				case 11:		
+					if(tabla==true){
+						cout << PURPLE << "\n****** REALIZANDO PRUEBA DE ACTITUD  ********" << DEFAULT << endl;
+						eliminarUsuariosporMinFoto(tu,3);
+						
+					}else{
+						cout << ERROR << "No podrá usar esta opción hasta que la Tabla de Usuarios no esté creada." << DEFAULT << endl;	
+					}
+				break;
 				
-				case 11:
+				case 12:
 						//Debug(tu);
 						Salir(tu);
 						cout << BLUE << "----------SALIENDO----------\n" ;
