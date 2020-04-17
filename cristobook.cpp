@@ -1362,6 +1362,102 @@ void eliminarUsuariosporMinFoto(TablaUsuarios &tu, int Fotos_min){
 		cout << "No hay más usuarios en la tabla." << endl;
 	}
 }
+/**
+ * @brief Módulo que se encarga de realizar el testin grupal.
+ * @param
+ * @post Realizará el testing que deseemos.
+ */
+void testingGrupal(){
+
+
+
+
+}
+/**
+ * @brief Módulo que se encarga de hacer un testing de cara a la práctica.
+ * @param TablaUsuarios &tu
+ * @post Sabremos si funciona.
+ * @version 1.0
+ * @author Carlos Fdez.
+ */
+void Testeo(TablaUsuarios &tu){
+
+	//Bucle que se repite 5 veces.
+		// 1º) Insetamos tres usuarios
+		// 2º) Eliminamos cinco usuario
+		// 3º) Insertamos dos usuarios
+		// 4º)Eliminamos cuatro usuarios.
+	//for(int i=0; i <= 5; i++){
+
+		for(int j=0; j < 3; j++){
+			insertarUsuarioNuevo(tu);
+		}
+	
+		for(int k=0; k < 5; k++){
+			eliminarUsuarioTablaUsuarios(tu);	
+		}
+
+		for(int l=0; l < 2; l++){
+			insertarUsuarioNuevo(tu);
+		}
+
+		for(int m=0; m < 4; m++){
+			eliminarUsuarioTablaUsuarios(tu);
+		}
+	//}
+
+}
+/**
+ * @brief Módulo que se encarga de hacer el segundo testing de cara a la práctica.
+ * @param TablaUsuarios &tu
+ * @post Sabremos si funciona.
+ * @version 1.0
+ * @author Carlos Fdez.
+ */
+void Testeo2(TablaUsuarios &tu){
+
+	cout  << CYAN << " ****    IMPRIMIENDO TABLA DE USUARIOS    **** " << DEFAULT << endl;
+	printTablaUsuarios(tu);
+	cout  << CYAN << " ****    ORDENANDO TABLA DE USUARIOS POR LOGIN    **** " << DEFAULT << endl;
+	ordenamosLogin(tu);
+	cout  << YELLOW << " Ordenando... " << DEFAULT << endl;
+	cout  << CYAN << " ****    IMPRIMIENDO TABLA DE USUARIOS    **** " << DEFAULT << endl;
+	printTablaUsuarios(tu);
+	cout  << CYAN << " ****    INSERTANDO FOTOS A CADA USUARIOS    **** " << DEFAULT << endl;
+	for(int i=0; i < getTotalTuplas(tu); i++){
+		insertarFoto(tu);
+	}
+	cout  << PURPLE << " ****    ELIMINANDO USUARIOS    **** " << DEFAULT << endl;
+	for(int j=0; j < 7; j++){
+		eliminarUsuarioTablaUsuarios(tu);
+	}
+}
+
+/**
+ * @brief Módulo que se encarga de realizar el testin grupal.
+ * @param TablaUsuarios tu (E/S)
+ * @post Realizará el testing que deseemos.
+ * @vesion 1.0
+ * @author Carlos Fdez
+ */
+void testingGrupal(TablaUsuarios &tu){
+
+	int n=0;
+
+	cout << YELLOW << "***** BIENVENIDO AL TESTING GRUPAL *****" << endl;
+	cout << "[1] Testing 1 " << endl;
+	cout << "[2] Testing 2 " << endl;
+	cout << "[3] Salir. " << DEFAULT << endl;
+	cin >> n;
+
+		if(n ==1){
+			Testeo(tu);
+		}else if (n ==2){
+			Testeo2(tu);
+		}
+
+
+}
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /**
  * @brief Módulo que se encarga de almacenar en la Tabla de Usuarios algunos usuarios predefinidos.
@@ -1558,7 +1654,8 @@ void MostrarMenu(){
 		cout << "\n[9]  Eliminar Fotografía de un Usuario. ";
 		cout << "\n[10] Imprimir las Fotografías de un Usuario. ";
 		cout << "\n[11] Prueba de aptitud. ";
-		cout << "\n[12] Salir. " << DEFAULT << endl;
+		cout << "\n[12] Testing grupal. ";		
+		cout << "\n[13] Salir. " << DEFAULT << endl;
 
 }
 /**
@@ -1585,7 +1682,7 @@ void MenuInicio(TablaUsuarios &tu){
 	f = crearFoto();
 	
 	//Filtro para que el usuario no se salga de las opciones.
-	while(opcion!=12){
+	while(opcion!=13){
 		//Mostramos menú anteriormente realizado.
 		MostrarMenu();
 		
@@ -1705,8 +1802,17 @@ void MenuInicio(TablaUsuarios &tu){
 						cout << ERROR << "No podrá usar esta opción hasta que la Tabla de Usuarios no esté creada." << DEFAULT << endl;	
 					}
 				break;
-				
-				case 12:
+
+				case 12:		
+					if(tabla==true){
+						cout << PURPLE << "\n****** REALIZANDO TESTING GRUPAL  ********" << DEFAULT << endl;
+						testingGrupal(tu);
+						
+					}else{
+						cout << ERROR << "No podrá usar esta opción hasta que la Tabla de Usuarios no esté creada." << DEFAULT << endl;	
+					}
+				break;				
+				case 13:
 						//Debug(tu);
 						Salir(tu);
 						cout << BLUE << "----------SALIENDO----------\n" ;
